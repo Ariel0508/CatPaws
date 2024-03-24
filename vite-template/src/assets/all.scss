@@ -1,0 +1,52 @@
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+$custom-colors:(
+    "brown": rgb(162,103,45),
+    "lightBrown": rgb(233, 184, 136),
+    "vanilla": rgb(244, 240, 227),
+    "lightVanilla": rgb(255, 248, 241),
+    "gray1": rgb(217, 217, 217),
+    "gray2": rgb(103, 103, 103),
+);
+
+$theme-colors:map-merge($theme-colors, $custom-colors);
+
+$spacer: 1rem;
+$spacers: (
+  0: 0,
+  1: $spacer * .25,
+  2: $spacer * .5,
+  3: $spacer,
+  4: $spacer * 1.5,
+  5: $spacer * 3,
+  6: $spacer * 4,
+  7: $spacer * 5,
+  8: $spacer * 8,
+  9: $spacer * 20,
+);
+
+$negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
+
+$breadcrumb-active-color: map-get($theme-colors, 'brown');
+$form-range-track-bg: map-get($theme-colors, 'lightBrown');
+$form-range-thumb-bg: map-get($theme-colors, 'brown');
+$form-range-thumb-active-bg: map-get($theme-colors, 'brown');
+$pagination-color: map-get($theme-colors, 'lightBrown');
+$pagination-active-color: map-get($theme-colors, 'brown');
+$pagination-bg: white;
+$pagination-active-bg: white;
+$pagination-active-border-color: map-get($theme-colors, 'gray1');
+$pagination-hover-color: map-get($theme-colors, 'brown');
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Damion&family=Noto+Sans+TC:wght@100..900&display=swap');
+
+body{
+    background-color: map-get($theme-colors, 'lightVanilla');
+    font-family: 'Noto Sans TC', sans-serif;
+}
+.logo,.copy{
+    font-family: 'Damion', cursive;
+}
+
