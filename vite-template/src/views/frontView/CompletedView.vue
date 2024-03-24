@@ -48,7 +48,9 @@
             <td></td>
             <td></td>
             <td></td>
-            <td class="text-lightBrown">折扣:$100</td>
+            <td class="text-lightBrown">
+              <!-- 折扣:$100 -->
+            </td>
             <td>訂單金額({{ order.products?.length }}商品):<span class="text-brown fs-5">${{ order.total }}</span></td>
           </tr>
         </tfoot>
