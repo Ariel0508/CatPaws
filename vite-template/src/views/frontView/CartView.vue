@@ -16,11 +16,11 @@
         <thead>
           <tr>
             <th width="5%"></th>
-            <th width="30%">商品名稱</th>
-            <th width="15%">單價</th>
-            <th width="20%">數量</th>
-            <th width="15%">小計</th>
-            <th width="15%">刪除</th>
+            <th width="35%">商品名稱</th>
+            <th width="20%">單價</th>
+            <th width="30%">數量</th>
+            <th width="20%">小計</th>
+            <th width="20%">刪除</th>
           </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@
             </td>
             <td>${{ cart.product.price }}</td>
             <td>
-              <div class="input-group w-50">
+              <div class="input-group w-100">
                 <button
                   v-if="cart.qty > 1"
                   type="button"
@@ -108,20 +108,20 @@
           <tr class="border-white">
             <td></td>
             <td></td>
-            <td>
-              <!-- <button
+            <!-- <td>
+              <button
                 type="button"
                 class="btn text-lightBrown p-0"
                 @click="openCouponModal()"
               >
                 <i class="bi bi-ticket-perforated fs-5"></i>
                 <span class="ms-2 fs-5">選擇優惠券</span>
-              </button> -->
-            </td>
-            <td class="text-lightBrown">
-              <!-- 折扣:$100 -->
-            </td>
-            <td class="text-brown fs-5">總金額:${{ carts.final_total }}元</td>
+              </button>
+            </td> -->
+            <!-- <td class="text-lightBrown">
+              折扣:$100
+            </td> -->
+            <td class="text-brown fs-5 text-end" colspan="3">總金額:${{ carts.final_total }}元</td>
             <td class="pe-3">
               <div
                 class="d-flex justify-content-center align-items-center p-0"
@@ -168,7 +168,7 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="4"
+        :slidesPerView="2"
         :grabCursor="true"
         :pagination="{
           clickable: true,
@@ -182,7 +182,7 @@
         <swiper-slide v-for="product in products" :key="product.id">
           <div class="col-md-9">
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5"
+              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
               @click="openModal(product)"
             >
               <span

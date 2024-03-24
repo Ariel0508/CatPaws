@@ -46,12 +46,12 @@
               <div class="form-check"></div>
             </td>
             <td></td>
-            <td></td>
-            <td></td>
+            <!-- <td></td> -->
+            <!-- <td></td> -->
             <td class="text-lightBrown">
               <!-- 折扣:$100 -->
             </td>
-            <td>訂單金額({{ order.products?.length }}商品):<span class="text-brown fs-5">${{ order.total }}</span></td>
+            <td colspan="4" class="text-end">訂單金額({{ order.products?.length }}商品):<span class="text-brown fs-5">${{ order.total }}</span></td>
           </tr>
         </tfoot>
       </table>
@@ -105,7 +105,7 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="4"
+        :slidesPerView="2"
         :grabCursor="true"
         :pagination="{
           clickable: true,
@@ -119,7 +119,7 @@
         <swiper-slide v-for="product in products" :key="product.id">
           <div class="col-md-9">
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5"
+              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
               @click="openModal(product)"
             >
               <span

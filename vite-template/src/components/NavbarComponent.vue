@@ -1,9 +1,9 @@
 <template>
   <div class="my-4">
     <nav class="navbar navbar-expand-xxl bg-vanilla fixed-top" :class="{ 'is-hidden': isHidden }">
-      <div class="container p-0">
+      <div class="container p-0 text-center">
         <RouterLink class="navbar-brand logo text-brown" to="/"><h1 class="fs-2">Cat Paws</h1></RouterLink>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" @click="toggleNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -25,7 +25,7 @@
                 <i class="bi bi-cart3 fs-6"></i>
                 <span class="p-1 position-absolute top-0 start-100 translate-middle
           badge rounded-pill bg-brown text-center" style="width: 30px;"
-          :style="{ display: store.carts?.length === 0 ? 'none' : 'block' }">
+          :style="{ display: store.carts?.length === 0 || isNavbarCollapsed ? 'none' : 'block' }">
           {{ store.carts?.length }}
         </span>
           <span class="visually-hidden"></span>
@@ -76,6 +76,11 @@ const scrollToTop = () => {
 const store = useCartStore()
 const { getCart } = store
 
+const isNavbarCollapsed = ref(false)
+
+const toggleNavbar = () => {
+  isNavbarCollapsed.value = !isNavbarCollapsed.value
+}
 onMounted(() => {
   getCart()
 })

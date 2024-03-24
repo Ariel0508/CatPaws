@@ -31,7 +31,7 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="4"
+        :slidesPerView="2"
         :grabCursor="true"
         :pagination="{
           clickable: true,
@@ -43,9 +43,9 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div class="col-md-9">
+          <div class="row">
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5"
+              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
               @click="openModal(product)"
             >
               <span
@@ -91,7 +91,7 @@
     </div>
   </div>
   <div class="container bg-white mt-8">
-    <div class="row">
+    <div class="row mb-5">
       <div class="col-md-6 p-0 position-relative" v-if="lastProduct">
         <div
           class="position-absolute top-50 start-50 translate-middle w-100 h-50 text-center"
@@ -106,22 +106,23 @@
           <p class="card-title text-brown">${{ lastProduct.price }}</p>
         </div>
       </div>
-      <div class="col-md-6 p-0 position-relative">
+      <div class="col-md-6 p-0 position-relative cursor-pointer">
         <img
           :src="lastProduct?.imagesUrl[0]"
           class="img-fluid object-fit-cover w-100"
           style="height: 700px"
           alt="picture"
+          @click="openModal(lastProduct)"
         />
         <p
           class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-white fs-4"
-        >
+          >
           新品上市
         </p>
       </div>
     </div>
     <div class="row flex-row-reverse">
-      <div class="col-md-6 p-0 position-relative" v-if="secondLastProduct">
+      <div class="col-md-6 col-12 p-0 position-relative" v-if="secondLastProduct">
         <div
           class="position-absolute top-50 start-50 translate-middle w-100 h-50 text-center"
         >
@@ -135,24 +136,25 @@
           <p class="card-title text-brown">${{ secondLastProduct.price }}</p>
         </div>
       </div>
-      <div class="col-md-6 p-0 position-relative">
+      <div class="col-md-6 col-12 p-0 position-relative cursor-pointer">
         <img
           :src="secondLastProduct?.imagesUrl[0]"
           class="img-fluid object-fit-cover w-100"
           style="height: 700px"
           alt="picture"
+          @click="openModal(secondLastProduct)"
         />
-        <p
+        <a
           class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-white fs-4"
-        >
+          >
           新品上市
-        </p>
+        </a>
       </div>
     </div>
   </div>
   <div class="container mt-8">
-    <div class="row flex-nowrap">
-      <div class="col-md-4 p-0 me-1 position-relative">
+    <div class="row">
+      <div class="col-md-4 col-12 p-0 mb-3 position-relative">
         <RouterLink
           class="text-decoration-none"
           to="/products?category=生活用品"
@@ -171,7 +173,7 @@
           </p>
         </RouterLink>
       </div>
-      <div class="col-md-4 p-0 me-1 position-relative">
+      <div class="col-md-4 col-12 p-0 mb-3 position-relative">
         <RouterLink
           class="text-decoration-none"
           to="/products?category=時尚配件"
@@ -190,7 +192,7 @@
           </p>
         </RouterLink>
       </div>
-      <div class="col-md-4 p-0 me-1 position-relative">
+      <div class="col-md-4 col-12 p-0 mb-3 position-relative">
         <RouterLink
           class="text-decoration-none"
           to="/products?category=休閒娛樂"
@@ -403,6 +405,9 @@ body {
 .newsimg {
   width: 500px;
   height: 400px;
+  cursor: pointer;
+}
+.cursor-pointer{
   cursor: pointer;
 }
 </style>

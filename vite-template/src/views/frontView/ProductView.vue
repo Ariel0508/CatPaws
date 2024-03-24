@@ -140,7 +140,7 @@
         </h3>
         <div id="swiper">
           <swiper
-            :slidesPerView="4"
+            :slidesPerView="2"
             :grabCursor="true"
             :pagination="{
               clickable: true,
@@ -154,7 +154,7 @@
             <swiper-slide v-for="product in products" :key="product.id">
               <div class="col-md-9">
                 <div
-                  class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5"
+                  class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
                   @click="openModal(product)"
                 >
                   <span

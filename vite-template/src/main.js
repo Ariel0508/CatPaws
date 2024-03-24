@@ -4,6 +4,7 @@ import { createPinia } from 'pinia'
 import './assets/all.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 // import 'bootstrap/scss/bootstrap.scss'
+import 'bootstrap'
 
 import Loading from 'vue-loading-overlay'
 

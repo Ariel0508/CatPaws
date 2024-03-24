@@ -29,6 +29,7 @@
                 style="width: 80px; height: 80px"
                 alt=""
               />
+              <br>
               {{ cart.product.title }}
             </td>
             <td></td>
@@ -43,21 +44,21 @@
               <div class="form-check"></div>
             </td>
             <td></td>
-            <td></td>
-            <td class="py-3">
-              <!-- <button
+            <!-- <td></td> -->
+            <!-- <td class="py-3">
+              <button
                 type="button"
                 class="btn text-lightBrown p-0"
                 @click="openModal()"
               >
                 <i class="bi bi-ticket-perforated fs-5"></i>
                 <span class="ms-2 fs-5">選擇優惠券</span>
-              </button> -->
-            </td>
+              </button>
+            </td> -->
             <td class="text-lightBrown">
               <!-- 折扣:$100 -->
             </td>
-            <td>訂單金額({{ carts?.carts?.length }}商品):<span class="text-brown fs-5">${{ carts.final_total }}</span></td>
+            <td colspan="3" class="text-end">訂單金額({{ carts?.carts?.length }}商品):<span class="text-brown fs-5">${{ carts.final_total }}</span></td>
           </tr>
         </tfoot>
       </table>
@@ -73,8 +74,8 @@
         @submit="createOrder"
       >
       <h5 class="my-5">購買人資料</h5>
-        <div class="row flex-nowrap">
-          <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-6 col-12">
             <div class="mb-4">
               <label for="name" class="form-label">姓名</label>
               <v-field
@@ -127,7 +128,7 @@
               ></error-message>
             </div>
           </div>
-          <div class="col-md-6">
+          <div class="col-md-6 col-12">
             <div class="mb-4">
               <label for="address" class="form-label">地址</label>
               <v-field
