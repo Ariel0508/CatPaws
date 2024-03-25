@@ -1,7 +1,9 @@
 <template>
+  <div class="container-fluid">
     <NavbarComponent />
         <RouterView />
     <FooterComponent />
+  </div>
 </template>
 
 <script>

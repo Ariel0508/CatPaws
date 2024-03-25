@@ -2,7 +2,7 @@
   <div id="app">
   <div class="container-fluid bg-black">
     <div class="row">
-      <div class="col-md-6 p-0">
+      <div class="col-md-5 col-12 p-0">
         <img
           src="../../../public/images/1.png"
           class="img-fluid"
@@ -10,7 +10,7 @@
           alt="banner"
         />
       </div>
-      <div class="col-md-6 text-center align-self-center p-0">
+      <div class="col-md-7 col-12 text-center align-self-center p-0 mt-5">
         <p class="text-light" style="font-size: 1.5em">
           讓您的貓咪成為時尚界的新寵兒!
         </p>
@@ -24,21 +24,22 @@
       </div>
     </div>
   </div>
-  <div class="container mt-8 p-0">
+  <div class="container mt-8">
     <h3 class="text-center text-brown">
       精選商品
       <div class="text-center text-brown m-0 p-0 fs-1">-</div>
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="2"
+        :slidesPerView="slidesPerView"
         :grabCursor="true"
+        :spaceBetween="30"
         :pagination="{
           clickable: true,
         }"
+         :freeMode="true"
         :modules="modules"
         class="mySwiper"
-        :navigation="true"
         :mousewheel="true"
         :keyboard="true"
       >
@@ -153,7 +154,7 @@
     </div>
   </div>
   <div class="container mt-8">
-    <div class="row">
+    <div class="row p-5">
       <div class="col-md-4 col-12 p-0 mb-3 position-relative">
         <RouterLink
           class="text-decoration-none"
@@ -220,7 +221,7 @@
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
@@ -323,10 +324,23 @@ export default {
           secondLastProduct.value = null
         })
     }
+    const slidesPerView = ref(4)
+    const setSlidesPerView = () => {
+      if (window.innerWidth <= 767) {
+        slidesPerView.value = 2
+      } else {
+        slidesPerView.value = 4
+      }
+    }
     onMounted(() => {
       getData()
       fetchLastProduct()
       fetchsecondLastProduct()
+      setSlidesPerView()
+      window.addEventListener('resize', setSlidesPerView)
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', setSlidesPerView)
     })
     return {
       modules: [Navigation, Pagination, Mousewheel, Keyboard],
@@ -338,7 +352,8 @@ export default {
       id,
       status,
       lastProduct,
-      secondLastProduct
+      secondLastProduct,
+      slidesPerView
     }
   },
   components: {

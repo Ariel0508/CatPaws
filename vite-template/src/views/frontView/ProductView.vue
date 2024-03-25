@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="container mt-8 p-0">
+    <div class="container mt-8">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item" to="/">
@@ -21,14 +21,14 @@
       <div class="row mt-5">
         <div class="col-md-2"></div>
         <div class="col-md-10">
-          <div class="row">
-            <div class="col-md-6">
+          <div class="row ">
+            <div class="col-md-6 col-12">
               <div class="row">
-                <ImageComponent :imageList="imagesUrl"></ImageComponent>
+                <ImageComponent :imageList="imagesUrl" class="mb-8"></ImageComponent>
               </div>
             </div>
             <div
-              class="col-md-6 ps-5 d-flex flex-column justify-content-between"
+              class="col-md-6 col-12 d-flex flex-column justify-content-between"
             >
               <div class="fs-4 mb-4">{{ product.title }}</div>
               <div class="mb-4">
@@ -77,9 +77,9 @@
                 </button>
               </div>
 
-              <div class="row m-0">
+              <div class="row">
                 <div
-                  class="d-flex justify-content-center align-items-center me-5 p-0"
+                  class="d-flex justify-content-center align-items-center mx-2 p-0 mt-3"
                   style="
                     width: 185px;
                     height: 40px;
@@ -102,7 +102,7 @@
                   </button>
                 </div>
                 <div
-                  class="d-flex justify-content-center align-items-center p-0"
+                  class="d-flex justify-content-center align-items-center mx-2 p-0 mt-3"
                   style="
                     width: 185px;
                     height: 40px;
@@ -133,28 +133,28 @@
           </div>
         </div>
       </div>
-      <div class="container mt-8 p-0">
+      <div class="container mt-8">
         <h3 class="text-center text-brown">
           猜你喜歡
           <div class="text-center text-brown m-0 p-0 fs-1">-</div>
         </h3>
         <div id="swiper">
           <swiper
-            :slidesPerView="2"
+            :slidesPerView="slidesPerView"
             :grabCursor="true"
+            :spaceBetween="30"
             :pagination="{
               clickable: true,
             }"
             :modules="modules"
             class="mySwiper"
-            :navigation="true"
             :mousewheel="true"
             :keyboard="true"
           >
             <swiper-slide v-for="product in products" :key="product.id">
-              <div class="col-md-9">
+              <div class="row">
                 <div
-                  class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
+                  class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
                   @click="openModal(product)"
                 >
                   <span
@@ -197,7 +197,7 @@
 
 <script>
 import axios from 'axios'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../../stores/cartStore'
 import { useToastMessageStore } from '../../stores/toastMessage'
@@ -290,6 +290,14 @@ export default {
       })
     }
     getProduct()
+    const slidesPerView = ref(4)
+    const setSlidesPerView = () => {
+      if (window.innerWidth <= 767) {
+        slidesPerView.value = 2
+      } else {
+        slidesPerView.value = 4
+      }
+    }
     watch(
       () => route.query,
       () => {
@@ -303,7 +311,13 @@ export default {
       getCart()
       getProducts()
       getData()
+      setSlidesPerView()
+      window.addEventListener('resize', setSlidesPerView)
     })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', setSlidesPerView)
+    })
+
     return {
       modules: [Pagination, Navigation, Mousewheel, Keyboard],
       products,
@@ -316,7 +330,8 @@ export default {
       getProducts,
       gProduct,
       id,
-      status
+      status,
+      slidesPerView
     }
   },
   components: {

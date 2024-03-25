@@ -52,19 +52,19 @@ watch([elementX, elementY, isOutside], () => {
 
 <template>
     <!-- {{ elementX }}, {{ elementY }}, {{ isOutside }} -->
-    <div class="goods-image p-0">
+    <div class="goods-image flex-column d-flex p-0 m-2">
         <div class="middle" ref="target">
             <img :src="imageList[activeIndex]" class="img-fluid object-fit-cover w-100" style="height: 400px;" alt="" />
             <!-- isOutside代表是否在外面，要取反 !isOutside 代表是否在裡面 -->
             <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
         </div>
         <!-- 小圖列表 -->
-        <ul class="small">
-            <!-- 通過下標值(i)控制active是否顯示 => 動態類名控制 :class="{ }" -->
-            <li class="list-unstyled" v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active: i === activeIndex }">
-                <img :src="img" class="img-fluid object-fit-cover w-100 h-100"  alt="" />
-            </li>
-        </ul>
+            <ul class="small d-flex row px-3">
+                <!-- 通過下標值(i)控制active是否顯示 => 動態類名控制 :class="{ }" -->
+                <li class="list-unstyled p-0 me-2" v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active: i === activeIndex }">
+                    <img :src="img" class="img-fluid object-fit-cover w-100 h-100"  alt="" />
+                </li>
+            </ul>
         <!-- 放大鏡大圖 -->
         <div class="large" :style="[
             {
@@ -77,6 +77,11 @@ watch([elementX, elementY, isOutside], () => {
 </template>
 
 <style scoped lang="scss">
+@media screen and (max-width: 768px) {
+    .large, .layer{
+        display: none;
+    }
+}
 .goods-image {
     width: 100%;
     height: 400px;
@@ -112,12 +117,12 @@ watch([elementX, elementY, isOutside], () => {
     }
 
     .small {
-        width: 100px;
+        width: 100%;
 
         li {
             width: 90px;
             height: 90px;
-            margin-bottom: 15px;
+            margin-block: 10px;
             cursor: pointer;
             &:hover,
             &.active {

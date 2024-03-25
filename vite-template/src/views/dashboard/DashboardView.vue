@@ -1,15 +1,17 @@
 <template>
-      <div class="container mt-5 p-0">
-        <RouterLink class="navbar-brand logo text-brown" to="/"><h1 class="fs-2">Cat Paws</h1></RouterLink>
-        <h2 class="mt-3 text-brown text-center">後台</h2>
-      </div>
-    <nav class="text-center mt-4">
-    <RouterLink class="text-decoration-none text-black m-2" to="/admin/products">產品</RouterLink>|
-    <RouterLink class="text-decoration-none text-black m-2" to="/admin/order">訂單</RouterLink>|
-    <!-- <RouterLink class="text-decoration-none text-black m-2" to="/admin/coupon">優惠券</RouterLink>| -->
-    <RouterLink class="text-decoration-none text-brown" to="/">回到前台</RouterLink>
-    </nav>
-    <RouterView />
+  <div class="container-fluid">
+    <div class="container mt-5 p-0">
+      <RouterLink class="navbar-brand logo text-brown" to="/"><h1 class="fs-2">Cat Paws</h1></RouterLink>
+      <h2 class="mt-3 text-brown text-center">後台</h2>
+    </div>
+  <nav class="text-center mt-4">
+  <RouterLink class="text-decoration-none text-black m-2" to="/admin/products">產品</RouterLink>|
+  <RouterLink class="text-decoration-none text-black m-2" to="/admin/order">訂單</RouterLink>|
+  <!-- <RouterLink class="text-decoration-none text-black m-2" to="/admin/coupon">優惠券</RouterLink>| -->
+  <RouterLink class="text-decoration-none text-brown" to="/">回到前台</RouterLink>
+  </nav>
+  <RouterView />
+  </div>
 
 </template>
 

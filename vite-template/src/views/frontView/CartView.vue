@@ -15,30 +15,32 @@
       >
         <thead>
           <tr>
-            <th width="5%"></th>
-            <th width="35%">商品名稱</th>
-            <th width="20%">單價</th>
-            <th width="30%">數量</th>
-            <th width="20%">小計</th>
-            <th width="20%">刪除</th>
+            <th class="ps-3">商品名稱</th>
+            <th>單價</th>
+            <th width="180" class="text-center">數量</th>
+            <th>小計</th>
+            <th>刪除</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="cart in carts.carts" :key="cart.id">
-            <td></td>
             <td>
-              <img
-                :src="cart.product.imageUrl"
-                class="img-fluid object-fit-cover"
-                style="width: 80px; height: 80px"
-                alt=""
-              />
-              <RouterLink
-                class="text-decoration-none ps-3 text-black"
-                :to="`/product/${cart.product.id}`"
-              >
-                {{ cart.product.title }}</RouterLink
-              >
+              <div>
+                <div>
+                  <img
+                    :src="cart.product.imageUrl"
+                    class="img-fluid object-fit-cover"
+                    style="width: 80px; height: 80px"
+                    alt=""
+                  />
+                </div>
+                <RouterLink
+                  class="text-decoration-none text-black"
+                  :to="`/product/${cart.product.id}`"
+                >
+                  {{ cart.product.title }}</RouterLink
+                >
+              </div>
             </td>
             <td>${{ cart.product.price }}</td>
             <td>
@@ -106,8 +108,6 @@
         </tbody>
         <tfoot>
           <tr class="border-white">
-            <td></td>
-            <td></td>
             <!-- <td>
               <button
                 type="button"
@@ -121,9 +121,14 @@
             <!-- <td class="text-lightBrown">
               折扣:$100
             </td> -->
-            <td class="text-brown fs-5 text-end" colspan="3">總金額:${{ carts.final_total }}元</td>
-            <td class="pe-3">
-              <div
+            <td colspan="2" class="text-brown fs-5">
+              <div class="row d-flex justify-content-end">
+                總金額:${{ carts.final_total }}元
+              </div>
+            </td>
+            <td colspan="3" class="ps-7">
+              <div class="row d-flex justify-content-center">
+                <div
                 class="d-flex justify-content-center align-items-center p-0"
                 style="
                   width: 185px;
@@ -138,6 +143,7 @@
                   onclick="window.scrollTo(0, 0);"
                   >立即結帳</RouterLink
                 >
+              </div>
               </div>
             </td>
           </tr>
@@ -168,19 +174,20 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="2"
+      :slidesPerView="slidesPerView"
         :grabCursor="true"
+        :spaceBetween="30"
         :pagination="{
           clickable: true,
         }"
+         :freeMode="true"
         :modules="modules"
         class="mySwiper"
-        :navigation="true"
         :mousewheel="true"
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div class="col-md-9">
+          <div class="row">
             <div
               class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
               @click="openModal(product)"
@@ -244,7 +251,7 @@ import 'swiper/css/navigation'
 
 import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules'
 
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
@@ -359,6 +366,15 @@ export default {
         })
       })
     }
+    const slidesPerView = ref(4)
+    const setSlidesPerView = () => {
+      if (window.innerWidth <= 767) {
+        slidesPerView.value = 2
+      } else {
+        slidesPerView.value = 4
+      }
+    }
+
     watch(() => carts.value, () => {
       getCartList()
     })
@@ -366,7 +382,13 @@ export default {
       getCart()
       getCartList()
       getProducts()
+      setSlidesPerView()
+      window.addEventListener('resize', setSlidesPerView)
     })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', setSlidesPerView)
+    })
+
     return {
       modules: [Navigation, Pagination, Mousewheel, Keyboard],
       products,
@@ -381,7 +403,8 @@ export default {
       addToCart,
       getProducts,
       getCartList,
-      updateCart
+      updateCart,
+      slidesPerView
     }
   },
   components: {

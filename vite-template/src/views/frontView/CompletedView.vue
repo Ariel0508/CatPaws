@@ -105,21 +105,22 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="2"
+      :slidesPerView="slidesPerView"
         :grabCursor="true"
+        :spaceBetween="30"
         :pagination="{
           clickable: true,
         }"
+         :freeMode="true"
         :modules="modules"
         class="mySwiper"
-        :navigation="true"
         :mousewheel="true"
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div class="col-md-9">
+          <div class="row">
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
+              class="card shadow-sm bg-body rounded-lg border-0 position-relativemb-5 col-12 ms-3 p-0"
               @click="openModal(product)"
             >
               <span
@@ -170,7 +171,7 @@
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRoute, useRouter } from 'vue-router'
@@ -265,9 +266,23 @@ export default {
     }
 
     getOrder()
+    const slidesPerView = ref(4)
+    const setSlidesPerView = () => {
+      if (window.innerWidth <= 767) {
+        slidesPerView.value = 2
+      } else {
+        slidesPerView.value = 4
+      }
+    }
     onMounted(() => {
       getData()
+      setSlidesPerView()
+      window.addEventListener('resize', setSlidesPerView)
     })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', setSlidesPerView)
+    })
+
     return {
       modules: [Pagination, Navigation],
       products,
@@ -279,7 +294,8 @@ export default {
       status,
       order,
       orderId,
-      payOrder
+      payOrder,
+      slidesPerView
     }
   },
   components: {
