@@ -2,7 +2,7 @@
   <div class="my-4">
     <nav class="navbar navbar-expand-xxl bg-vanilla fixed-top">
       <div class="container p-0 text-center">
-        <RouterLink class="navbar-brand logo text-brown" to="/" onclick="window.scrollTo(0, 0)">
+        <RouterLink class="navbar-brand logo text-brown" to="/" @click="hideMobileMenu">
           <h1 class="fs-2">Cat Paws</h1>
         </RouterLink>
         <div class="d-flex align-items-center">

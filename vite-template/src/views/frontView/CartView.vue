@@ -341,101 +341,12 @@
         </div>
       </div>
     </div>
-    <div class="container mt-8 p-0">
-      <h3 class="text-center text-brown">
-        猜你喜歡
-        <div class="text-center text-brown m-0 p-0 fs-1">-</div>
-      </h3>
-      <div id="swiper">
-        <swiper
-          :slidesPerView="slidesPerView"
-          :grabCursor="true"
-          :spaceBetween="30"
-          :pagination="{
-            clickable: true,
-          }"
-          :freeMode="true"
-          :modules="modules"
-          class="mySwiper"
-          :mousewheel="true"
-          :keyboard="true"
-        >
-          <swiper-slide v-for="product in products" :key="product.id">
-            <div class="row">
-              <div
-                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-3 col-12 ms-3 p-0"
-                @click="openModal(product)"
-              >
-                <span
-                  class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                  v-if="product.price !== product.origin_price"
-                  >SALE</span
-                >
-                <img
-                  :src="product.imageUrl"
-                  class="card-img-top object-fit-cover w-100"
-                  style="height: 300px"
-                  alt="productPicture"
-                />
-                <div class="card-body">
-                  <p class="card-title">{{ product.title }}</p>
-                  <div
-                    v-if="product.price === product.origin_price"
-                    class="text-gray2 fs-5 card-title text-center"
-                  >
-                    ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-                  </div>
-                  <div
-                    v-else
-                    class="d-flex align-items-center justify-content-center card-title ms-2"
-                  >
-                    <del class="text-gray2 fs-5"
-                      >${{
-                        $filters.numberToCurrencyNo(product.origin_price)
-                      }}</del
-                    >
-                    <div class="text-brown fs-5 ms-3">
-                      ${{ $filters.numberToCurrencyNo(product.price) }}
-                    </div>
-                  </div>
-                  <br />
-                  <button
-                    type="button"
-                    class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                    @click.stop="addToCart(product.id, 1)"
-                  >
-                    <span
-                      v-if="product.id === status.loadingItem"
-                      class="spinner-border spinner-border-sm"
-                      aria-hidden="true"
-                    >
-                    </span>
-                    <i class="bi bi-cart-plus"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </swiper-slide>
-        </swiper>
-      </div>
-    </div>
     <ToastMessages />
   </div>
 </template>
 
 <script>
-// Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue'
-// Import Swiper styles
-import 'swiper/css'
-
-import 'swiper/css/pagination'
-
-import 'swiper/css/navigation'
-
-import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules'
-
-import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
@@ -618,15 +529,6 @@ export default {
           })
         })
     }
-    const slidesPerView = ref(4)
-    const setSlidesPerView = () => {
-      if (window.innerWidth <= 767) {
-        slidesPerView.value = 1
-      } else {
-        slidesPerView.value = 4
-      }
-    }
-
     watch(
       () => carts.value,
       () => {
@@ -638,15 +540,8 @@ export default {
       getCart()
       getCartList()
       getProducts()
-      setSlidesPerView()
-      window.addEventListener('resize', setSlidesPerView)
     })
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', setSlidesPerView)
-    })
-
     return {
-      modules: [Navigation, Pagination, Mousewheel, Keyboard],
       products,
       id,
       openModal,
@@ -663,13 +558,10 @@ export default {
       addToCart,
       getProducts,
       getCartList,
-      updateCart,
-      slidesPerView
+      updateCart
     }
   },
   components: {
-    Swiper,
-    SwiperSlide,
     ToastMessages
   }
 }
@@ -685,50 +577,6 @@ export default {
   user-select: none;
   margin: 5px;
   text-decoration: none;
-}
-#swiper {
-  height: 550px;
-}
-html,
-body {
-  position: relative;
-  height: 100%;
-}
-
-.swiper {
-  width: 100%;
-  height: 100%;
-}
-
-.swiper-wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: vanilla;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.swiper-horizontal > .swiper-pagination-bullets,
-.swiper-pagination-bullets.swiper-pagination-horizontal {
-  bottom: 0px;
-}
-
-.swiper-pagination-bullet-active {
-  background: #a2672d;
-}
-.swiper-button-next,
-.swiper-button-prev {
-  color: #a2672d;
-}
-.card:hover {
-  cursor: pointer;
-  transform: scale(1.02);
 }
 #addCoupon {
   width: 70%;
