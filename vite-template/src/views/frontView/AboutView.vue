@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-8 p-0">
+  <div class="container mt-7 p-0">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
         <li class="breadcrumb-item" to="/">
@@ -17,10 +17,10 @@
         <img src="../../../public/images/4.png" class="img-fluid" alt="" />
       </div>
       <div
-        class="col-md-6 p-0 text-center d-flex justify-content-center align-items-center"
+        class="col-md-6 p-0 d-flex justify-content-center align-items-center"
       >
         <div class="p-5">
-          <h2>
+          <h2 class="text-center">
             品牌故事
             <div class="text-black m-0 p-0 fs-1">-</div>
           </h2>
@@ -43,10 +43,10 @@
         <img src="../../../public/images/5.png" class="img-fluid" alt="" />
       </div>
       <div
-        class="col-md-6 p-0 text-center d-flex justify-content-center align-items-center"
+        class="col-md-6 p-0 d-flex justify-content-center align-items-center"
       >
         <div class="p-5">
-          <h2>
+          <h2 class="text-center">
             設計理念
             <div class="text-black m-0 p-0 fs-1">-</div>
           </h2>
@@ -59,10 +59,20 @@
     </div>
   </div>
   <div class="container mt-8 mb-5 text-center">
-    <div class="mb-3 fs-3">歡迎來店參觀選購!</div>
-    <div class="lh-base fs-4">
-      非常歡迎您帶著您的寶貝毛小孩一同到我們的店裡參觀選購。
-      我們的店位於象山附近有停車場供您使用，<br />歡迎您開車前往，也可以搭乘大眾運輸交通工具，期待您的到來!!
+    <div class="mb-3 fs-6 fw-bold">歡迎來店參觀選購!</div>
+    <div class="fs-6">
+      非常歡迎您帶著您的寶貝毛小孩一同到我們的店裡參觀選購。<br />
+      我們的店位於象山附近有停車場供您使用，歡迎您開車前往，也可以搭乘大眾運輸交通工具，期待您的到來!!
+    </div>
+  </div>
+  <div class="container fs-6 mb-5">
+    <div class="text-center mb-3">
+      <i class="bi bi-telephone-fill me-3"></i>
+      連絡電話:02-123456
+    </div>
+    <div class="text-center">
+      <i class="bi bi-geo-alt-fill me-3"></i>
+      地址:110台北市信義區信義路五段150巷
     </div>
   </div>
   <div class="container-fluid mb-5">
@@ -74,21 +84,5 @@
       loading="lazy"
       referrerpolicy="no-referrer-when-downgrade"
     ></iframe>
-  </div>
-  <div class="container fs-4">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="text-center">
-          <i class="bi bi-telephone-fill me-3"></i>
-          連絡電話:02-123456
-        </div>
-      </div>
-      <div class="col-md-8">
-        <div class="text-center">
-            <i class="bi bi-geo-alt-fill me-3"></i>
-            地址:110台北市信義區信義路五段150巷
-        </div>
-      </div>
-    </div>
   </div>
 </template>

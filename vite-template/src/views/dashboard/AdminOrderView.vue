@@ -76,7 +76,7 @@ const updatePaid = (item) => {
     })
   })
 }
-
+getOrders()
 const delOrder = () => {
   const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/order/${tempOrder.value.id}`
   isLoading.value = true
@@ -93,12 +93,12 @@ const delOrder = () => {
     })
   })
 }
-
-getOrders()
 </script>
 
 <template>
-    <VueLoading :active="isLoading" :z-index="1060" />
+<VueLoading :active="isLoading" :is-full-page="true" :background-color="'#FFF8F1'" :opacity="1" :z-index="1060">
+    <img src="../../assets/loading.gif" width="500" alt="loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+  </VueLoading>
     <div class="container">
         <table class="table mt-4">
           <thead>

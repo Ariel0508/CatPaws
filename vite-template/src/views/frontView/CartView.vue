@@ -1,31 +1,47 @@
-<!-- eslint-disable no-unused-vars -->
 <template>
-  <div class="container mt-8 p-0">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page">購物車</li>
-      </ol>
-    </nav>
-  </div>
-  <div class="container mt-5">
-    <div class="row">
-      <table
-        v-if="carts.total !== 0"
-        class="table align-middle border-lightBrown"
-      >
-        <thead>
-          <tr>
-            <th class="ps-3">商品名稱</th>
-            <th>單價</th>
-            <th width="180" class="text-center">數量</th>
-            <th>小計</th>
-            <th>刪除</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="cart in carts.carts" :key="cart.id">
-            <td>
-              <div>
+  <div>
+    <VueLoading
+      :active="isLoading"
+      :is-full-page="true"
+      :background-color="'#FFF8F1'"
+      :opacity="1"
+      :z-index="1060"
+    >
+      <img
+        src="../../assets/loading.gif"
+        width="500"
+        alt="loading"
+        style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        "
+      />
+    </VueLoading>
+
+    <div class="container mt-7 p-0">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active" aria-current="page">購物車</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="container mt-5">
+      <div class="row" v-if="carts.total !== 0">
+        <table class="table align-middle border-lightBrown pc">
+          <thead>
+            <tr class="text-center">
+              <th width="200">商品名稱</th>
+              <th width="120">單價</th>
+              <th width="200" class="text-center">數量</th>
+              <th width="200">小計</th>
+              <th width="100">刪除</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr v-for="cart in carts.carts" :key="cart.id">
+              <td>
                 <div>
                   <img
                     :src="cart.product.imageUrl"
@@ -40,95 +56,254 @@
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-              </div>
-            </td>
-            <td>${{ cart.product.price }}</td>
-            <td>
-              <div class="input-group w-100">
+              </td>
+              <td>${{ $filters.numberToCurrencyNo(cart.product.price) }}</td>
+              <td>
+                <div class="input-group w-100">
+                  <button
+                    v-if="cart.qty > 1"
+                    type="button"
+                    class="btn btn-outline-lightBrown"
+                    :disabled="cart.qty === 1"
+                    @click="
+                      cart.qty--;
+                      changeCartQty(cart, cart.qty);
+                    "
+                  >
+                    <span style="height: 16px; width: 16px">-</span>
+                  </button>
+                  <button
+                    v-else
+                    type="button"
+                    class="btn btn-outline-brown border-lightBrown"
+                    @click="removeCartItem(cart.id)"
+                  >
+                    <span style="height: 16px; width: 16px"
+                      ><i class="bi bi-trash"></i
+                    ></span>
+                  </button>
+                  <input
+                    v-model="cart.qty"
+                    type="number"
+                    min="1"
+                    max="20"
+                    class="form-control text-center"
+                    aria-label="Dollar amount (with dot and two decimal places)"
+                    readonly
+                    :disabled="cart.productId === status.loadingItem"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-lightBrown"
+                    @click="
+                      cart.qty++;
+                      changeCartQty(cart, cart.qty);
+                    "
+                  >
+                    <span style="height: 16px; width: 16px">+</span>
+                  </button>
+                </div>
+              </td>
+              <td>${{ $filters.numberToCurrencyNo(cart.total) }}</td>
+              <td>
                 <button
-                  v-if="cart.qty > 1"
-                  type="button"
-                  class="btn btn-outline-lightBrown"
-                  :disabled="cart.qty === 1"
-                  @click="
-                    cart.qty--;
-                    changeCartQty(cart, cart.qty);
-                  "
-                >
-                  <span style="height: 16px; width: 16px">-</span>
-                </button>
-                <button
-                  v-else
-                  type="button"
-                  class="btn btn-outline-brown border-lightBrown"
+                  class="btn btn-outline-brown border-0"
                   @click="removeCartItem(cart.id)"
                 >
-                  <span style="height: 16px; width: 16px"
-                    ><i class="bi bi-trash"></i
-                  ></span>
-                </button>
-                <input
-                  v-model="cart.qty"
-                  type="number"
-                  min="1"
-                  max="20"
-                  class="form-control text-center"
-                  aria-label="Dollar amount (with dot and two decimal places)"
-                  readonly
-                  :disabled="cart.productId === status.loadingItem"
-                />
-                <button
-                  type="button"
-                  class="btn btn-outline-lightBrown"
-                  @click="
-                    cart.qty++;
-                    changeCartQty(cart, cart.qty);
-                  "
-                >
-                  <span style="height: 16px; width: 16px">+</span>
-                </button>
-              </div>
-            </td>
-            <td>${{ cart.total }}</td>
-            <td>
-              <button
-                class="btn btn-outline-brown border-0"
-                @click="removeCartItem(cart.id)"
-              >
-              <span
-                      v-if="cart.id === status.loadingItem"
-                      class="spinner-border spinner-border-sm"
-                      aria-hidden="true"
-                    >
+                  <span
+                    v-if="cart.id === status.loadingItem"
+                    class="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  >
                   </span>
-                <i class="bi bi-trash"></i>
-              </button>
-            </td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr class="border-white">
-            <!-- <td>
-              <button
-                type="button"
-                class="btn text-lightBrown p-0"
-                @click="openCouponModal()"
-              >
-                <i class="bi bi-ticket-perforated fs-5"></i>
-                <span class="ms-2 fs-5">選擇優惠券</span>
-              </button>
-            </td> -->
-            <!-- <td class="text-lightBrown">
-              折扣:$100
-            </td> -->
-            <td colspan="2" class="text-brown fs-5">
-              <div class="row d-flex justify-content-end">
-                總金額:${{ carts.final_total }}元
-              </div>
-            </td>
-            <td colspan="3" class="ps-7">
-              <div class="row d-flex justify-content-center">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr class="border-white">
+              <td></td>
+              <td colspan="2" class="pt-4 p-0">
+                <form
+                  @submit.prevent="addCouponCode"
+                  class="d-flex align-items-center justify-content-end"
+                >
+                  <i class="bi bi-ticket-perforated fs-2 text-brown pe-3"></i>
+                  <select
+                    name="addCoupon"
+                    id="addCoupon"
+                    class="form-select rounded w-50 p-2 fs-6"
+                    v-model="coupon_code"
+                  >
+                    <option value="" disabled>請輸入優惠券</option>
+                    <option value="newMember20%">新會員首購八折優惠</option>
+                    <option value="purchasesover200010%">
+                      滿兩千享九折優惠
+                    </option>
+                  </select>
+                  <button
+                    type="submit"
+                    class="btn btn-outline-brown border-lightBrown ms-3 p-2"
+                  >
+                    <span>
+                      <img
+                        src="@/assets/loadingCoupon.gif"
+                        alt="loading"
+                        width="20"
+                        v-if="isLoadingCoupon"
+                      />
+                    </span>
+                    套用
+                  </button>
+                </form>
+              </td>
+              <td></td>
+              <td>
+                <div class="text-black mt-3 pe-7 text-end fs-5">
+                  總計：${{ $filters.numberToCurrencyNo(carts.total) }}元
+                </div>
+              </td>
+            </tr>
+            <tr class="border-white">
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td class="p-3">
                 <div
+                  class="d-flex justify-content-center align-items-center p-0"
+                >
+                  <div
+                    class="d-flex justify-content-center align-items-center p-0"
+                    style="
+                      width: 185px;
+                      height: 40px;
+                      background: #ffffff;
+                      border: 1px solid #e9b888;
+                    "
+                  >
+                    <a
+                      class="loginbtn text-center bg-brown d-block"
+                      @click="goToOrder"
+                      >立即結帳</a
+                    >
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="mobile">
+          <div
+            class="border-top border-lightBrown p-3 bg-white"
+            v-for="cart in carts.carts"
+            :key="cart.id"
+          >
+            <div class="row">
+              <div class="col-3">
+                <img
+                  :src="cart.product.imageUrl"
+                  class="img-fluid object-fit-cover"
+                  style="width: 80px; height: 80px"
+                  alt=""
+                />
+              </div>
+              <div class="col-4">
+                <RouterLink
+                  class="text-decoration-none text-black"
+                  :to="`/product/${cart.product.id}`"
+                >
+                  {{ cart.product.title }}</RouterLink
+                >
+                <div>
+                  ${{ $filters.numberToCurrencyNo(cart.total) }}
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="input-group w-100 pt-4">
+                  <button
+                    v-if="cart.qty > 1"
+                    type="button"
+                    class="btn btn-outline-lightBrown"
+                    :disabled="cart.qty === 1"
+                    @click="
+                      cart.qty--;
+                      changeCartQty(cart, cart.qty);
+                    "
+                  >
+                    <span style="height: 16px; width: 16px">-</span>
+                  </button>
+                  <button
+                    v-else
+                    type="button"
+                    class="btn btn-outline-brown border-lightBrown"
+                    @click="removeCartItem(cart.id)"
+                  >
+                    <span style="height: 16px; width: 16px"
+                      ><i class="bi bi-trash"></i
+                    ></span>
+                  </button>
+                  <input
+                    v-model="cart.qty"
+                    type="number"
+                    min="1"
+                    max="20"
+                    class="form-control text-center"
+                    aria-label="Dollar amount (with dot and two decimal places)"
+                    readonly
+                    :disabled="cart.productId === status.loadingItem"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-outline-lightBrown"
+                    @click="
+                      cart.qty++;
+                      changeCartQty(cart, cart.qty);
+                    "
+                  >
+                    <span style="height: 16px; width: 16px">+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="border-top border-lightBrown p-3 bg-white">
+            <form
+              @submit.prevent="addCouponCode"
+              class="d-flex align-items-center justify-content-between"
+            >
+              <i class="bi bi-ticket-perforated fs-1 text-brown pe-1"></i>
+              <select
+                name="addCoupon"
+                id="addCoupon"
+                class="form-select rounded p-2 fs-6"
+                v-model="coupon_code"
+              >
+                <option value="" disabled>請輸入優惠券</option>
+                <option value="newMember20%">新會員首購八折優惠</option>
+                <option value="purchasesover200010%">滿兩千享九折優惠</option>
+              </select>
+              <button
+                type="submit"
+                class="btn btn-outline-brown border-lightBrown p-2"
+              >
+                <span>
+                  <img
+                    src="@/assets/loadingCoupon.gif"
+                    alt="loading"
+                    width="20"
+                    v-if="isLoadingCoupon"
+                  />
+                </span>
+                套用
+              </button>
+            </form>
+            <div class="text-black text-end mt-3 fs-5">
+              總計：${{ $filters.numberToCurrencyNo(carts.total) }}元
+            </div>
+            <div class="d-flex justify-content-end align-items-center my-4">
+              <div
                 class="d-flex justify-content-center align-items-center p-0"
                 style="
                   width: 185px;
@@ -137,23 +312,22 @@
                   border: 1px solid #e9b888;
                 "
               >
-                <RouterLink
+                <a
                   class="loginbtn text-center bg-brown d-block"
-                  to="/order"
-                  onclick="window.scrollTo(0, 0);"
-                  >立即結帳</RouterLink
+                  @click="goToOrder"
+                  >立即結帳</a
                 >
               </div>
-              </div>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+            </div>
+          </div>
+        </div>
+      </div>
       <div v-else class="text-center mb-8">
         <img
           src="../../../public/images/empty-cart.png"
-          class="img-fluid object-fit-cover w-25"
+          class="img-fluid object-fit-cover"
           alt="emptycartpicture"
+          style="width: 300px; height: 350px"
         />
         <div class="text-brown fs-5">
           購物車還沒有商品呦~
@@ -161,82 +335,92 @@
           <RouterLink
             to="/products"
             class="btn btn-brown text-decoration-none m-3"
+            onclick="window.scrollTo(0, 0)"
             >按我去選購</RouterLink
           >
         </div>
       </div>
     </div>
-  </div>
-  <div class="container mt-8 p-0">
-    <h3 class="text-center text-brown">
-      猜你喜歡
-      <div class="text-center text-brown m-0 p-0 fs-1">-</div>
-    </h3>
-    <div id="swiper">
-      <swiper
-      :slidesPerView="slidesPerView"
-        :grabCursor="true"
-        :spaceBetween="30"
-        :pagination="{
-          clickable: true,
-        }"
-         :freeMode="true"
-        :modules="modules"
-        class="mySwiper"
-        :mousewheel="true"
-        :keyboard="true"
-      >
-        <swiper-slide v-for="product in products" :key="product.id">
-          <div class="row">
-            <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
-              @click="openModal(product)"
-            >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
+    <div class="container mt-8 p-0">
+      <h3 class="text-center text-brown">
+        猜你喜歡
+        <div class="text-center text-brown m-0 p-0 fs-1">-</div>
+      </h3>
+      <div id="swiper">
+        <swiper
+          :slidesPerView="slidesPerView"
+          :grabCursor="true"
+          :spaceBetween="30"
+          :pagination="{
+            clickable: true,
+          }"
+          :freeMode="true"
+          :modules="modules"
+          class="mySwiper"
+          :mousewheel="true"
+          :keyboard="true"
+        >
+          <swiper-slide v-for="product in products" :key="product.id">
+            <div class="row">
+              <div
+                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-3 col-12 ms-3 p-0"
+                @click="openModal(product)"
               >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title"
-                >
-                  ${{ product.origin_price }}
-                </div>
-                <div v-else class="d-flex align-items-center card-title ms-2">
-                  <del class="text-gray2 fs-5">${{ product.origin_price }}</del>
-                  <div class="text-brown fs-4 ms-3">${{ product.price }}</div>
-                </div>
-                <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
-                >
                 <span
+                  class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
+                  v-if="product.price !== product.origin_price"
+                  >SALE</span
+                >
+                <img
+                  :src="product.imageUrl"
+                  class="card-img-top object-fit-cover w-100"
+                  style="height: 300px"
+                  alt="productPicture"
+                />
+                <div class="card-body">
+                  <p class="card-title">{{ product.title }}</p>
+                  <div
+                    v-if="product.price === product.origin_price"
+                    class="text-gray2 fs-5 card-title text-center"
+                  >
+                    ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                  </div>
+                  <div
+                    v-else
+                    class="d-flex align-items-center justify-content-center card-title ms-2"
+                  >
+                    <del class="text-gray2 fs-5"
+                      >${{
+                        $filters.numberToCurrencyNo(product.origin_price)
+                      }}</del
+                    >
+                    <div class="text-brown fs-5 ms-3">
+                      ${{ $filters.numberToCurrencyNo(product.price) }}
+                    </div>
+                  </div>
+                  <br />
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
                       v-if="product.id === status.loadingItem"
                       class="spinner-border spinner-border-sm"
                       aria-hidden="true"
                     >
-                  </span>
-                  <i class="bi bi-cart-plus"></i>
-                </button>
+                    </span>
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </swiper-slide>
-      </swiper>
+          </swiper-slide>
+        </swiper>
+      </div>
     </div>
+    <ToastMessages />
   </div>
-  <ToastMessages></ToastMessages>
-  <CouponModaL ref="CouponModalRef"></CouponModaL>
 </template>
 
 <script>
@@ -256,7 +440,6 @@ import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
 import { useToastMessageStore } from '../../stores/toastMessage'
-import CouponModaL from '../../components/CouponModal.vue'
 import ToastMessages from '../../components/ToastMessages.vue'
 
 export default {
@@ -274,12 +457,15 @@ export default {
     const status = ref({
       loadingItem: ''
     })
+    const isLoading = ref(false)
     const getProducts = () => {
       const { category = '' } = route.query
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/products?category=${category}`
+      isLoading.value = true
       axios.get(url).then((res) => {
         products.value = res.data.products
-        console.log(res.data.products)
+        isLoading.value = false
+        // console.log(res.data.products)
       })
     }
     const openModal = (product) => {
@@ -287,7 +473,72 @@ export default {
         window.scrollTo(0, 0)
       })
     }
-    const CouponModalRef = ref(null)
+    // eslint-disable-next-line camelcase
+    const coupon_code = ref(localStorage.getItem('coupon_code') || '')
+    const isLoadingCoupon = ref(false)
+    const addCouponCode = () => {
+      if (
+        // eslint-disable-next-line camelcase
+        coupon_code.value === 'purchasesover200010%' &&
+        carts.value.total < 2000
+      ) {
+        pushMessage({
+          style: 'danger',
+          title: '無法使用優惠券',
+          content: '購物車金額需達到2000元才能使用優惠券'
+        })
+        return
+      }
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/coupon`
+      const coupon = {
+        // eslint-disable-next-line camelcase
+        code: coupon_code.value
+      }
+      // eslint-disable-next-line camelcase
+      if (coupon_code.value === '') {
+        return
+      }
+      // eslint-disable-next-line camelcase
+      isLoadingCoupon.value = true
+      axios
+        .post(url, { data: coupon })
+        .then((response) => {
+          pushMessage({
+            style: 'success',
+            title: '加入優惠券',
+            content: response.data.message
+          })
+          getCart()
+          isLoadingCoupon.value = false
+        })
+        .catch((error) => {
+          isLoadingCoupon.value = false
+          pushMessage({
+            style: 'danger',
+            title: '優惠券不可用',
+            content: error.response.data.message
+          })
+        })
+      // eslint-disable-next-line camelcase
+      localStorage.setItem('coupon_code', coupon_code.value)
+    }
+    const goToOrder = () => {
+      if (
+        // eslint-disable-next-line camelcase
+        coupon_code.value === 'purchasesover200010%' &&
+        carts.value.total < 2000
+      ) {
+        pushMessage({
+          style: 'danger',
+          title: '無法使用優惠券',
+          content: '購物車金額需達到2000元才能使用優惠券'
+        })
+        return
+      }
+      router.push('/order')
+      window.scrollTo(0, 0)
+      // localStorage.removeItem('coupon_code')
+    }
     const getCartList = () => {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart`
       axios.get(url).then((res) => {
@@ -308,9 +559,6 @@ export default {
         getCartList()
       })
     }
-    const openCouponModal = () => {
-      CouponModalRef.value.oModal()
-    }
     const addToCart = (id) => {
       status.value.loadingItem = id
       const order = {
@@ -326,6 +574,7 @@ export default {
           content: res.data.message
         })
         getCart()
+        getCartList()
       })
     }
 
@@ -351,33 +600,40 @@ export default {
         qty: data.qty
       }
 
-      axios.put(url, { data: cart }).then((response) => {
-        pushMessage({
-          style: 'success',
-          title: '更新購物車',
-          content: response.data.message
+      axios
+        .put(url, { data: cart })
+        .then((response) => {
+          pushMessage({
+            style: 'success',
+            title: '更新購物車',
+            content: response.data.message
+          })
+          getCart()
         })
-        getCart()
-      }).catch((error) => {
-        pushMessage({
-          style: 'danger',
-          title: '更新購物車',
-          content: error.response.data.message
+        .catch((error) => {
+          pushMessage({
+            style: 'danger',
+            title: '更新購物車',
+            content: error.response.data.message
+          })
         })
-      })
     }
     const slidesPerView = ref(4)
     const setSlidesPerView = () => {
       if (window.innerWidth <= 767) {
-        slidesPerView.value = 2
+        slidesPerView.value = 1
       } else {
         slidesPerView.value = 4
       }
     }
 
-    watch(() => carts.value, () => {
-      getCartList()
-    })
+    watch(
+      () => carts.value,
+      () => {
+        getCartList()
+        getCart()
+      }
+    )
     onMounted(() => {
       getCart()
       getCartList()
@@ -396,9 +652,13 @@ export default {
       openModal,
       carts,
       status,
+      isLoading,
+      isLoadingCoupon,
       changeCartQty,
-      CouponModalRef,
-      openCouponModal,
+      addCouponCode,
+      // eslint-disable-next-line camelcase
+      coupon_code,
+      goToOrder,
       removeCartItem,
       addToCart,
       getProducts,
@@ -410,11 +670,9 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
-    CouponModaL,
     ToastMessages
   }
 }
-
 </script>
 
 <style>
@@ -428,9 +686,8 @@ export default {
   margin: 5px;
   text-decoration: none;
 }
-
 #swiper {
-  height: 450px;
+  height: 550px;
 }
 html,
 body {
@@ -471,5 +728,22 @@ body {
 }
 .card:hover {
   cursor: pointer;
+  transform: scale(1.02);
+}
+#addCoupon {
+  width: 70%;
+}
+@media screen and (max-width: 767px) {
+  .pc {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+}
+@media screen and (min-width: 768px) {
+  .mobile {
+    display: none;
+  }
 }
 </style>

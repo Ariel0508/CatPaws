@@ -28,22 +28,26 @@ const top = ref(0)
 const positionX = ref(0)
 const positionY = ref(0)
 watch([elementX, elementY, isOutside], () => {
-// console.log('x,y變化了')
-// 如果鼠標沒有移入盒子內， 直接不執行後面的邏輯
+  // console.log('x,y變化了')
+  // 如果鼠標沒有移入盒子內， 直接不執行後面的邏輯
   if (isOutside.value) return
   // console.log('後面邏輯執行了')
   // 有效範圍內控制滑塊距離
   // 橫向
-  if (elementX.value > 100 && elementX.value < 300) { left.value = elementX.value - 100 }
+  if (elementX.value > 125 && elementX.value < 325) {
+    left.value = elementX.value - 125
+  }
   // 縱向
-  if (elementY.value > 100 && elementY.value < 300) { top.value = elementY.value - 100 }
+  if (elementY.value > 125 && elementY.value < 325) {
+    top.value = elementY.value - 125
+  }
   // 邊界距離控制
   // 橫向
-  if (elementX.value < 100) left.value = 0
-  if (elementX.value > 300) left.value = 200
+  if (elementX.value < 125) left.value = 0
+  if (elementX.value > 325) left.value = 225
   // 縱向
-  if (elementY.value < 100) top.value = 0
-  if (elementY.value > 300) top.value = 200
+  if (elementY.value < 125) top.value = 0
+  if (elementY.value > 325) top.value = 225
   // 控制大圖的顯示
   positionX.value = -left.value * 2
   positionY.value = -top.value * 2
@@ -51,84 +55,128 @@ watch([elementX, elementY, isOutside], () => {
 </script>
 
 <template>
-    <!-- {{ elementX }}, {{ elementY }}, {{ isOutside }} -->
-    <div class="goods-image flex-column d-flex p-0 m-2">
-        <div class="middle" ref="target">
-            <img :src="imageList[activeIndex]" class="img-fluid object-fit-cover w-100" style="height: 400px;" alt="" />
-            <!-- isOutside代表是否在外面，要取反 !isOutside 代表是否在裡面 -->
-            <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
-        </div>
-        <!-- 小圖列表 -->
-            <ul class="small d-flex row px-3">
-                <!-- 通過下標值(i)控制active是否顯示 => 動態類名控制 :class="{ }" -->
-                <li class="list-unstyled p-0 me-2" v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active: i === activeIndex }">
-                    <img :src="img" class="img-fluid object-fit-cover w-100 h-100"  alt="" />
-                </li>
-            </ul>
-        <!-- 放大鏡大圖 -->
-        <div class="large" :style="[
-            {
-                backgroundImage: `url(${imageList[activeIndex]})`,
-                backgroundPositionX: `${positionX}px`,
-                backgroundPositionY: `${positionY}px`,
-            },
-        ]" v-show="!isOutside"></div>
+  <!-- {{ elementX }}, {{ elementY }}, {{ isOutside }} -->
+  <div class="goods-image flex-column d-flex p-0">
+    <div class="middle" ref="target">
+      <img
+        :src="imageList[activeIndex]"
+        class="img-fluid object-fit-cover w-100"
+        alt=""
+      />
+      <!-- isOutside代表是否在外面，要取反 !isOutside 代表是否在裡面 -->
+      <div
+        class="layer"
+        v-show="!isOutside"
+        :style="{ left: `${left}px`, top: `${top}px` }"
+      ></div>
     </div>
+    <!-- 小圖列表 -->
+    <ul class="small d-flex px-0 m-0">
+      <!-- 通過下標值(i)控制active是否顯示 => 動態類名控制 :class="{ }" -->
+      <li
+        class="list-unstyled p-0 me-2"
+        v-for="(img, i) in imageList"
+        :key="i"
+        @mouseenter="enterhandler(i)"
+        :class="{ active: i === activeIndex }"
+      >
+        <img :src="img" class="img-fluid object-fit-cover w-100 h-100" alt="" />
+      </li>
+    </ul>
+    <!-- 放大鏡大圖 -->
+    <div
+      class="large"
+      :style="[
+        {
+          backgroundImage: `url(${imageList[activeIndex]})`,
+          backgroundPositionX: `${positionX}px`,
+          backgroundPositionY: `${positionY}px`,
+        },
+      ]"
+      v-show="!isOutside"
+    ></div>
+  </div>
 </template>
 
 <style scoped lang="scss">
-@media screen and (max-width: 768px) {
-    .large, .layer{
-        display: none;
-    }
-}
 .goods-image {
+  width: 450px;
+  height: 450px;
+  position: relative;
+  display: flex;
+
+  .middle {
+    width: 450px;
+    height: 450px;
+    background: #f5f5f5;
+  }
+
+  .large {
+    position: absolute;
+    top: 0;
+    left: 470px;
+    width: 450px;
+    height: 450px;
+    z-index: 500;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-repeat: no-repeat;
+    background-size: 900px 900px;
+    background-color: #f8f8f8;
+  }
+
+  .layer {
+    width: 225px;
+    height: 225px;
+    background: rgba(0, 0, 0, 0.2);
+    left: 0;
+    top: 0;
+    position: absolute;
+  }
+
+  .small {
     width: 100%;
-    height: 400px;
-    position: relative;
-    display: flex;
+
+    li {
+      width: 100px;
+      height: 100px;
+      margin-block: 20px;
+      cursor: pointer;
+      &:hover,
+      &.active {
+        border: 3px solid #e9b888;
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .large,
+    .layer {
+      display: none;
+    }
+    width: 300px;
+    height: 300px;
 
     .middle {
-        width: 400px;
-        height: 400px;
-    background: #f5f5f5;
+      width: 300px;
+      height: 300px;
     }
 
     .large {
-        position: absolute;
-        top: 0;
-        left: 420px;
-        width: 400px;
-        height: 400px;
-        z-index: 500;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        background-repeat: no-repeat;
-        background-size: 800px 800px;
-        background-color: #f8f8f8;
+      left: 320px;
+      width: 300px;
+      height: 300px;
     }
 
     .layer {
-        width: 200px;
-        height: 200px;
-        background: rgba(0, 0, 0, 0.2);
-        left: 0;
-        top: 0;
-        position: absolute;
+      width: 150px;
+      height: 150px;
     }
 
-    .small {
-        width: 100%;
-
-        li {
-            width: 90px;
-            height: 90px;
-            margin-block: 10px;
-            cursor: pointer;
-            &:hover,
-            &.active {
-                border: 3px solid #E9B888;
-            }
-        }
+    .small li {
+      width: 70px;
+      height: 70px;
+      margin-block: 15px;
     }
+  }
 }
 </style>

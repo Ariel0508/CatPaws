@@ -32,12 +32,17 @@ $breadcrumb-active-color: map-get($theme-colors, 'brown');
 $form-range-track-bg: map-get($theme-colors, 'lightBrown');
 $form-range-thumb-bg: map-get($theme-colors, 'brown');
 $form-range-thumb-active-bg: map-get($theme-colors, 'brown');
+$form-select-border-color: map-get($theme-colors, 'lightBrown');
+$form-select-focus-border-color: map-get($theme-colors, 'brown');
+
 $pagination-color: map-get($theme-colors, 'lightBrown');
 $pagination-active-color: map-get($theme-colors, 'brown');
 $pagination-bg: white;
 $pagination-active-bg: white;
 $pagination-active-border-color: map-get($theme-colors, 'gray1');
 $pagination-hover-color: map-get($theme-colors, 'brown');
+$pagination-focus-color:  map-get($theme-colors, 'brown');
+
 
 $position-values: (
   0: 0,

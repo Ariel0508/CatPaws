@@ -1,9 +1,9 @@
 <script setup>
 import axios from 'axios'
 
-import { useToastMessageStore } from '@/stores/toastMessage'
-
 import { ref } from 'vue'
+
+import { useToastMessageStore } from '@/stores/toastMessage'
 
 import CouponModal from '@/components/CouponModal.vue'
 import DelModal from '@/components/DelModal.vue'
@@ -28,7 +28,7 @@ const tempCoupon = ref({
 })
 const isNew = ref(false)
 const isLoading = ref(false)
-
+const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
 const openCouponModal = (status, item) => {
   isNew.value = status
   if (isNew.value) {
@@ -46,11 +46,9 @@ const openDelCouponModal = (item) => {
   delModalRef.value.openModal()
 }
 
-const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
 const getCoupons = () => {
-  const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupons`
   isLoading.value = true
-  axios.get(url).then((response) => {
+  axios.get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/coupons`).then((response) => {
     coupons.value = response.data.coupons
     isLoading.value = false
   }).catch((error) => {
@@ -84,6 +82,7 @@ const updateCoupon = (tempCoupon) => {
     })
     getCoupons()
     couponModalRef.value.hideModal()
+    console.log(tempCoupon)
   }).catch((error) => {
     isLoading.value = false
     pushMessage({

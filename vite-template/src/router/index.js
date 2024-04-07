@@ -65,7 +65,8 @@ const routes = [
         component: () => import('../views/dashboard/AdminOrderView.vue')
       }
     ]
-  }
+  },
+  { path: '/:catchAll(.*)', redirect: '/' }
 ]
 
 const router = createRouter({

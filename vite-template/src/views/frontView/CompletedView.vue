@@ -1,171 +1,240 @@
 <template>
-  <div class="container mt-8 p-0">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page" v-if="order.is_paid === true">
-          訂單完成!感謝您的購買!
-        </li>
-        <li class="breadcrumb-item active" aria-current="page" v-else>待付款訂單</li>
-      </ol>
-    </nav>
-  </div>
-  <div class="container mt-5">
-    <form  @submit.prevent="payOrder">
-    <div class="row">
-      <table class="table align-middle border-bottom border-lightBrown m-0">
-        <thead>
-          <tr>
-            <th width="2%"></th>
-            <th width="30%">訂單商品</th>
-            <th width="8%"></th>
-            <th width="20%">單價</th>
-            <th width="20%">數量</th>
-            <th width="20%">小計</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in order.products" :key="item.id">
-            <td></td>
-            <td>
-              <img
-                :src="item.product.imageUrl"
-                style="width: 80px; height: 80px"
-                alt=""
-              />
-              {{ item.product.title }}
-            </td>
-            <td></td>
-            <td>${{ item.product.price }}</td>
-            <td>{{ item.qty }}</td>
-            <td>${{ item.final_total }}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td>
-              <div class="form-check"></div>
-            </td>
-            <td></td>
-            <!-- <td></td> -->
-            <!-- <td></td> -->
-            <td class="text-lightBrown">
-              <!-- 折扣:$100 -->
-            </td>
-            <td colspan="4" class="text-end">訂單金額({{ order.products?.length }}商品):<span class="text-brown fs-5">${{ order.total }}</span></td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <div
-      class="row justify-content-center bg-white px-8 py-6"
+  <div>
+    <VueLoading
+      :active="isLoading"
+      :is-full-page="true"
+      :background-color="'#FFF8F1'"
+      :opacity="1"
+      :z-index="1060"
     >
-      <div class="col-md-6">
-        <div class="mb-3">送貨地址:{{ order.user.address }}</div>
-        <div class="mb-3">Email:{{ order.user.email }}</div>
-        <div class="mb-3">顧客姓名:{{ order.user.name }}</div>
-        <div class="mb-3">電話:{{ order.user.tel }}</div>
-      </div>
-      <div class="col-md-6">
-        <div class="mb-3">留言</div>
-        <div
-          class="border border-1 rounded p-2 mb-3 w-100"
-          style="height: 100px"
-        >
-          {{ order.message }}
+      <img
+        src="../../assets/loading.gif"
+        width="500"
+        alt="loading"
+        style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        "
+      />
+    </VueLoading>
+    <div class="container mt-7 p-0">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li
+            class="breadcrumb-item active"
+            aria-current="page"
+            v-if="order.is_paid === true"
+          >
+            訂單完成!感謝您的購買!
+          </li>
+          <li class="breadcrumb-item active" aria-current="page" v-else>
+            待付款訂單
+          </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="container mt-5">
+      <div class="row">
+        <table class="table pc align-middle border-bottom border-lightBrown">
+          <thead>
+            <tr class="text-center">
+              <th width="200">商品名稱</th>
+              <th width="120">單價</th>
+              <th width="200" class="text-center">數量</th>
+              <th width="200">小計</th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            <tr v-for="item in order.products" :key="item.id">
+              <td>
+                <div>
+                  <img
+                    :src="item.product.imageUrl"
+                    class="img-fluid object-fit-cover"
+                    style="width: 80px; height: 80px"
+                    alt=""
+                  />
+                  <div>{{ item.product.title }}</div>
+                </div>
+              </td>
+              <td>${{ $filters.numberToCurrencyNo(item.product.price) }}</td>
+              <td>{{ item.qty }}</td>
+              <td>${{ $filters.numberToCurrencyNo(item.total) }}</td>
+            </tr>
+          </tbody>
+          <tfoot class="border-bottom border-white">
+            <tr>
+              <td colspan="4" class="text-end pe-5">
+                <div class="text-brown fs-5 text-end mt-3">
+                  訂單金額：${{
+                    $filters.numberToCurrencyNo(Math.floor(order.total))
+                  }}元
+                </div>
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="mobile">
+          <div
+            class="border-top border-lightBrown p-3 bg-white"
+            v-for="item in order.products"
+            :key="item.id"
+          >
+            <div class="row">
+              <div class="col-4">
+                <img
+                  :src="item.product.imageUrl"
+                  class="img-fluid object-fit-cover"
+                  style="width: 80px; height: 80px"
+                  alt=""
+                />
+              </div>
+              <div class="col-5">
+                <div>{{ item.product.title }}</div>
+                <div>${{ $filters.numberToCurrencyNo(item.total) }}</div>
+              </div>
+              <div class="col-3 text-center">x {{ item.qty }}</div>
+            </div>
+          </div>
+          <div class="border-top border-lightBrown p-3 bg-white">
+            <div class="text-brown fs-5 text-end mt-3">
+              訂單金額：${{
+                $filters.numberToCurrencyNo(Math.floor(order.total))
+              }}元
+            </div>
+          </div>
         </div>
       </div>
-      <div class="text-end">付款狀態
-              <span class="text-danger" v-if="!order.is_paid">尚未付款</span>
-              <span v-else class="text-success">付款完成</span>
-            </div>
-    </div>
-    <div class="p-3 bg-white row  border-top border-1 border-lightBrown" v-if="order.is_paid === false">
-      <div class="text-end">
-        <button type="submit" class="btn p-0 border-0">
-          <div
-            class="d-flex justify-content-center align-items-center p-0"
-            style="
-              width: 185px;
-              height: 40px;
-              background: #ffffff;
-              border: 1px solid #e9b888;
-            "
-          >
-        <button type="submit" class="loginbtn text-center bg-lightBrown border-0">確認付款去</button>
+      <form @submit.prevent="payOrder">
+        <div class="row px-2 py-5 fs-5">
+          <div class="mb-5">下單時間：{{ $filters.date(order.create_at) }}</div>
+
+          <div class="col-md-6 col-12">
+            <div class="mb-3">送貨地址：{{ order.user.address }}</div>
+            <div class="mb-3">Email：{{ order.user.email }}</div>
+            <div class="mb-3">顧客姓名：{{ order.user.name }}</div>
+            <div class="mb-3">電話：{{ order.user.tel }}</div>
           </div>
-        </button>
-      </div>
-    </div>
-  </form>
-  </div>
-  <div class="container mt-8 p-0">
-    <h3 class="text-center text-brown">
-      猜你喜歡
-      <div class="text-center text-brown m-0 p-0 fs-1">-</div>
-    </h3>
-    <div id="swiper">
-      <swiper
-      :slidesPerView="slidesPerView"
-        :grabCursor="true"
-        :spaceBetween="30"
-        :pagination="{
-          clickable: true,
-        }"
-         :freeMode="true"
-        :modules="modules"
-        class="mySwiper"
-        :mousewheel="true"
-        :keyboard="true"
-      >
-        <swiper-slide v-for="product in products" :key="product.id">
-          <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="mb-3">留言</div>
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relativemb-5 col-12 ms-3 p-0"
-              @click="openModal(product)"
+              class="border border-1 rounded p-2 mb-3 w-100 bg-white"
+              style="height: 100px"
             >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
+              {{ order.message }}
+            </div>
+          </div>
+          <div class="text-end">
+            付款狀態
+            <span class="text-danger" v-if="!order.is_paid">尚未付款</span>
+            <span v-else class="text-success">付款完成</span>
+          </div>
+        </div>
+        <div class="text-end" v-if="order.is_paid === false">
+          <div>
+            <button type="submit" class="btn p-0 border-0">
+              <div
+                class="d-flex justify-content-center align-items-center p-0"
+                style="
+                  width: 185px;
+                  height: 40px;
+                  background: #ffffff;
+                  border: 1px solid #e9b888;
+                "
               >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title"
-                >
-                  ${{ product.origin_price }}
-                </div>
-                <div v-else class="d-flex align-items-center card-title ms-2">
-                  <del class="text-gray2 fs-5">${{ product.origin_price }}</del>
-                  <div class="text-brown fs-4 ms-3">${{ product.price }}</div>
-                </div>
                 <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
+                  type="submit"
+                  class="loginbtn text-center bg-lightBrown border-0"
                 >
-                  <span
-                    v-if="product.id === status.loadingItem"
-                    class="spinner-border spinner-border-sm"
-                    aria-hidden="true"
-                  ></span
-                  ><i class="bi bi-cart-plus"></i>
+                  確認付款去
                 </button>
               </div>
-            </div>
+            </button>
           </div>
-        </swiper-slide>
-      </swiper>
+        </div>
+      </form>
     </div>
+    <div class="container mt-8 p-0">
+      <h3 class="text-center text-brown">
+        猜你喜歡
+        <div class="text-center text-brown m-0 p-0 fs-1">-</div>
+      </h3>
+      <div id="swiper">
+        <swiper
+          :slidesPerView="slidesPerView"
+          :grabCursor="true"
+          :spaceBetween="30"
+          :pagination="{
+            clickable: true,
+          }"
+          :freeMode="true"
+          :modules="modules"
+          class="mySwiper"
+          :mousewheel="true"
+          :keyboard="true"
+        >
+          <swiper-slide v-for="product in products" :key="product.id">
+            <div class="row">
+              <div
+                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-3 col-12 ms-3 p-0"
+                @click="openModal(product)"
+              >
+                <span
+                  class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
+                  v-if="product.price !== product.origin_price"
+                  >SALE</span
+                >
+                <img
+                  :src="product.imageUrl"
+                  class="card-img-top object-fit-cover w-100"
+                  style="height: 300px"
+                  alt="productPicture"
+                />
+                <div class="card-body">
+                  <p class="card-title">{{ product.title }}</p>
+                  <div
+                    v-if="product.price === product.origin_price"
+                    class="text-gray2 fs-5 card-title text-center"
+                  >
+                    ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                  </div>
+                  <div
+                    v-else
+                    class="d-flex align-items-center justify-content-center card-title ms-2"
+                  >
+                    <del class="text-gray2 fs-5"
+                      >${{
+                        $filters.numberToCurrencyNo(product.origin_price)
+                      }}</del
+                    >
+                    <div class="text-brown fs-5 ms-3">
+                      ${{ $filters.numberToCurrencyNo(product.price) }}
+                    </div>
+                  </div>
+                  <br />
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
+                      v-if="product.id === status.loadingItem"
+                      class="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span
+                    ><i class="bi bi-cart-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper>
+      </div>
+    </div>
+    <ToastMessages />
   </div>
-  <ToastMessages></ToastMessages>
 </template>
 
 <script>
@@ -195,20 +264,25 @@ export default {
     const toastMessageStore = useToastMessageStore()
     const { pushMessage } = toastMessageStore
     const { getCart } = store
+    const carts = ref({})
     const id = ref(route.params.productId)
     const products = ref([])
     const status = ref({
       loadingItem: ''
     })
+    const isLoading = ref(false)
     const getData = () => {
+      isLoading.value = true
       axios
         .get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/products`)
         .then((res) => {
           products.value = res.data.products
+          isLoading.value = false
         })
         .catch((err) => {
           // eslint-disable-next-line no-alert
           alert(err.response.data.message)
+          isLoading.value = false
         })
     }
     const openModal = (product) => {
@@ -240,42 +314,61 @@ export default {
 
     const getOrder = () => {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/order/${orderId.value}`
-      axios.get(url).then((response) => {
-        order.value = response.data.order
-      }).catch((error) => {
-        pushMessage({
-          style: 'danger',
-          title: '錯誤訊息',
-          content: error.response.data.message
+      isLoading.value = true
+      axios
+        .get(url)
+        .then((response) => {
+          order.value = response.data.order
+          isLoading.value = false
+          // console.log(order.value)
         })
-      })
+        .catch((error) => {
+          pushMessage({
+            style: 'danger',
+            title: '錯誤訊息',
+            content: error.response.data.message
+          })
+          isLoading.value = false
+        })
     }
 
     const payOrder = () => {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/pay/${orderId.value}`
-      axios.post(url).then(() => {
-        getOrder()
-      }).catch((error) => {
-        pushMessage({
-          style: 'danger',
-          title: '錯誤訊息',
-          content: error.response.data.message
+      isLoading.value = true
+      axios
+        .post(url)
+        .then(() => {
+          getOrder()
+          isLoading.value = false
+          pushMessage({
+            style: 'success',
+            title: '付款成功',
+            content: '感謝您的支持'
+          })
         })
-      })
+        .catch((error) => {
+          pushMessage({
+            style: 'danger',
+            title: '錯誤訊息',
+            content: error.response.data.message
+          })
+          isLoading.value = false
+        })
       window.scrollTo(0, 0)
     }
-
     getOrder()
+
     const slidesPerView = ref(4)
     const setSlidesPerView = () => {
       if (window.innerWidth <= 767) {
-        slidesPerView.value = 2
+        slidesPerView.value = 1
       } else {
         slidesPerView.value = 4
       }
     }
     onMounted(() => {
       getData()
+      getCart()
       setSlidesPerView()
       window.addEventListener('resize', setSlidesPerView)
     })
@@ -286,12 +379,14 @@ export default {
     return {
       modules: [Pagination, Navigation],
       products,
+      carts,
       openModal,
       addToCart,
       getOrder,
       getCart,
       id,
       status,
+      isLoading,
       order,
       orderId,
       payOrder,
@@ -307,6 +402,19 @@ export default {
 </script>
 
 <style>
+@media screen and (max-width: 767px) {
+  .pc {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+}
+@media screen and (min-width: 768px) {
+  .mobile {
+    display: none;
+  }
+}
 .loginbtn {
   width: 175px;
   height: 30px;
@@ -318,7 +426,7 @@ export default {
   text-decoration: none;
 }
 #swiper {
-  height: 450px;
+  height: 550px;
 }
 html,
 body {
@@ -365,5 +473,9 @@ body {
 .swiper-button-next,
 .swiper-button-prev {
   color: #a2672d;
+}
+.card:hover {
+  cursor: pointer;
+  transform: scale(1.02);
 }
 </style>

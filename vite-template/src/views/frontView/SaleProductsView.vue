@@ -1,53 +1,133 @@
 <template>
   <div id="app">
-<div class="container mt-8 p-0">
-    <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item" to="/"><RouterLink class="text-black text-decoration-none" to="/">首頁</RouterLink></li>
-    <li class="breadcrumb-item active" aria-current="page">特價商品</li>
-  </ol>
-</nav>
-<div class="row mt-5">
-<div class="col-md-3">
-<div class="fs-4 text-gray2 mt-3 mb-2">篩選條件</div>
-<div class="fs-6 text-gray2 mb-2 btn p-0 border-0" @click="heightPrice">價格高到低</div>
-<br>
-<div class="fs-6 text-gray2 mb-2 btn p-0 border-0" @click="lowPrice">價格低到高</div>
-</div>
-<div class="col-md-9">
-<div class="row mb-5">
-    <div class="col-md-4" v-for="product in products" :key="product.id">
-        <div class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5" @click="openModal(product)">
-          <span class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown" v-if="product.price !== product.origin_price">SALE</span>
-                      <img :src="product.imageUrl" class="card-img-top object-fit-cover" style="height: 300px;" alt="productPicture">
-                      <div class="card-body">
-                        <p class="card-title">{{ product.title }}</p>
-                        <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title"
+    <VueLoading
+      :active="isLoading"
+      :is-full-page="true"
+      :background-color="'#FFF8F1'"
+      :opacity="1"
+      :z-index="1060"
+    >
+      <img
+        src="../../assets/loading.gif"
+        width="500"
+        alt="loading"
+        style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        "
+      />
+    </VueLoading>
+
+    <div class="container mt-7 p-0">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" to="/">
+            <RouterLink class="text-black text-decoration-none" to="/"
+              >首頁</RouterLink
+            >
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">特價商品</li>
+        </ol>
+      </nav>
+      <div class="mSale d-flex justify-content-end mt-5">
+        <select
+          class="mSale p-1 text-gray2"
+          aria-label="Default select example"
+          @change="selectChange"
+        >
+          <option selected>價格</option>
+          <option value="high">價格高到低</option>
+          <option value="low">價格低到高</option>
+        </select>
+      </div>
+      <div class="row mt-5">
+        <div class="col-md-3">
+          <div class="pSale">
+            <div class="fs-4 text-gray2 mb-2">篩選條件</div>
+            <div
+              class="fs-6 text-gray2 mb-2 btn p-0 border-0"
+              @click="heightPrice"
+            >
+              <span class="heightPrice">價格高到低</span>
+            </div>
+            <br />
+            <div
+              class="fs-6 text-gray2 mb-2 btn p-0 border-0"
+              @click="lowPrice"
+            >
+              <span class="lowPrice">價格低到高</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="row">
+            <div
+              class="col-md-4 col-6"
+              v-for="product in products"
+              :key="product.id"
+            >
+              <div
+                class="card shadow-sm bg-light rounded-lg border-0 position-relative mb-5"
+                @click="openModal(product)"
+              >
+                <span
+                  class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown"
+                  v-if="product.price !== product.origin_price"
+                  >SALE</span
                 >
-                  ${{ product.origin_price }}
-                </div>
-                <div v-else class="d-flex align-items-center card-title ms-2">
-                  <del class="text-gray2 fs-5">${{ product.origin_price }}</del>
-                  <div class="text-brown fs-4 ms-3">${{ product.price }}</div>
-                </div>
-                        <button type="button" class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0" @click.stop="addToCart(product.id, 1)">
-                          <span
+                <img
+                  :src="product.imageUrl"
+                  class="card-img-top object-fit-cover w-100"
+                  style="height: 280px"
+                  alt="productPicture"
+                />
+                <div class="card-body">
+                  <p class="card-title text-center pt-2">
+                    {{ product.title }}
+                  </p>
+                  <div
+                    v-if="product.price === product.origin_price"
+                    class="text-gray2 fs-5 card-title"
+                  >
+                    ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                  </div>
+                  <div
+                    v-else
+                    class="d-flex justify-content-center align-items-center card-title ms-2"
+                  >
+                    <del class="text-gray2 fs-5"
+                      >${{
+                        $filters.numberToCurrencyNo(product.origin_price)
+                      }}</del
+                    >
+                    <div class="text-brown fs-5 ms-3">
+                      ${{ $filters.numberToCurrencyNo(product.price) }}
+                    </div>
+                  </div>
+                  <br />
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
                       v-if="product.id === status.loadingItem"
                       class="spinner-border spinner-border-sm"
                       aria-hidden="true"
                     ></span>
-                          <i class="bi bi-cart-plus"></i></button>
-                      </div>
+                    <i class="bi bi-cart-plus"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<ToastMessages></ToastMessages>
+  </div>
+  <ToastMessages />
 </template>
 
 <script>
@@ -74,14 +154,19 @@ export default {
     const status = ref({
       loadingItem: ''
     })
+    const isLoading = ref(false)
     const carts = ref([])
     const finalTotal = ref(0)
     const total = ref(0)
     const lowPrice = () => {
       products.value.sort((a, b) => a.price - b.price)
+      document.querySelector('.lowPrice').classList.add('price-active')
+      document.querySelector('.heightPrice').classList.remove('price-active')
     }
     const heightPrice = () => {
       products.value.sort((a, b) => b.price - a.price)
+      document.querySelector('.heightPrice').classList.add('price-active')
+      document.querySelector('.lowPrice').classList.remove('price-active')
     }
     const openModal = (product) => {
       router.push(`/product/${product.id}`).then(() => {
@@ -90,11 +175,21 @@ export default {
     }
     const getProducts = () => {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/products/all`
-      axios.get(url).then((res) => {
-        const filteredProducts = res.data.products.filter(product => product.price < product.origin_price)
-        products.value = filteredProducts
-        // console.log(filteredProducts)
-      })
+      isLoading.value = true
+      axios
+        .get(url)
+        .then((res) => {
+          const filteredProducts = res.data.products.filter(
+            (product) => product.price < product.origin_price
+          )
+          products.value = filteredProducts
+          isLoading.value = false
+          // console.log(filteredProducts)
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-alert
+          alert(err.response.data.message)
+        })
     }
     const addToCart = (id) => {
       status.value.loadingItem = id
@@ -113,6 +208,14 @@ export default {
         getCart()
       })
     }
+    const selectChange = () => {
+      const selectedValue = event.target.value
+      if (selectedValue === 'high') {
+        heightPrice()
+      } else if (selectedValue === 'low') {
+        lowPrice()
+      }
+    }
     onMounted(() => {
       getProducts()
     })
@@ -120,6 +223,7 @@ export default {
       id,
       products,
       status,
+      isLoading,
       addToCart,
       openModal,
       heightPrice,
@@ -127,7 +231,8 @@ export default {
       carts,
       finalTotal,
       total,
-      getProducts
+      getProducts,
+      selectChange
     }
   },
   components: {
@@ -136,9 +241,40 @@ export default {
 }
 </script>
 
-<style>
-.card:hover{
-  cursor: pointer;
-  transform: scale(1.05);
+<style scoped lang="scss">
+.card {
+  height: 420px;
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.02);
+  }
+}
+.mSale {
+  display: none;
+}
+
+.price-active {
+  color: #a2672d;
+}
+@media screen and (max-width: 768px) {
+  .mSale select {
+    display: block;
+    width: 170px;
+    background: #fff8f1;
+    border: none;
+    border-bottom: 1px solid #a2672d;
+    &:active,
+    &:focus {
+      border: none;
+      border-bottom: 1px solid #a2672d;
+      outline: none;
+    }
+  }
+  .pSale {
+    display: none;
+  }
+  .card {
+    height: 450px;
+  }
 }
 </style>

@@ -10,7 +10,7 @@ export const useToastMessageStore = defineStore('toastMessage', {
     toastShow () {
       setTimeout(() => {
         this.messages.shift()
-      }, 500)
+      }, 1000)
     },
     clearToast (index) {
       this.messages.splice(index, 1)

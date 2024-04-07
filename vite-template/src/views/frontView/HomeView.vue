@@ -1,16 +1,34 @@
 <template>
   <div id="app">
-  <div class="container-fluid bg-black">
-    <div class="row">
+    <VueLoading
+      :active="isLoading"
+      :is-full-page="true"
+      :background-color="'#FFF8F1'"
+      :opacity="1"
+      :z-index="1060"
+    >
+      <img
+        src="../../assets/loading.gif"
+        width="500"
+        alt="loading"
+        style="
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        "
+      />
+    </VueLoading>
+    <div class="row p-0 bg-black">
       <div class="col-md-5 col-12 p-0">
         <img
           src="../../../public/images/1.png"
-          class="img-fluid"
-          style="height: 600px"
+          class="img-fluid w-100 object-fit-cover"
+          style="height: 500px"
           alt="banner"
         />
       </div>
-      <div class="col-md-7 col-12 text-center align-self-center p-0 mt-5">
+      <div class="col-md-7 col-12 text-center align-self-center mt-5 p-0">
         <p class="text-light" style="font-size: 1.5em">
           讓您的貓咪成為時尚界的新寵兒!
         </p>
@@ -37,7 +55,7 @@
         :pagination="{
           clickable: true,
         }"
-         :freeMode="true"
+        :freeMode="true"
         :modules="modules"
         class="mySwiper"
         :mousewheel="true"
@@ -46,7 +64,7 @@
         <swiper-slide v-for="product in products" :key="product.id">
           <div class="row">
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-12 ms-3 p-0"
+              class="card shadow-sm rounded-lg border-0 position-relative col-12 ms-3 p-0 mb-3"
               @click="openModal(product)"
             >
               <span
@@ -60,30 +78,44 @@
                 style="height: 300px"
                 alt="productPicture"
               />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
+              <div
+                class="card-body d-flex flex-column justify-content-between p-3"
+              >
+                <div class="card-title">{{ product.title }}</div>
                 <div
                   v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title"
+                  class="text-gray2 fs-5 mt-2"
                 >
-                  ${{ product.origin_price }}
+                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
                 </div>
-                <div v-else class="d-flex align-items-center card-title ms-2">
-                  <del class="text-gray2 fs-5">${{ product.origin_price }}</del>
-                  <div class="text-brown fs-4 ms-3">${{ product.price }}</div>
-                </div>
-                <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
+                <div
+                  v-else
+                  class="d-flex align-items-center justify-content-center ms-2 mt-2"
                 >
-                <span
+                  <del class="text-gray2 fs-5"
+                    >${{
+                      $filters.numberToCurrencyNo(product.origin_price)
+                    }}</del
+                  >
+                  <div class="text-brown fs-5 ms-3">
+                    ${{ $filters.numberToCurrencyNo(product.price) }}
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown m-2 px-5 rounded-pill"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
                       v-if="product.id === status.loadingItem"
                       class="spinner-border spinner-border-sm"
                       aria-hidden="true"
                     ></span>
-                  <i class="bi bi-cart-plus"></i>
-                </button>
+                    加入購物車
+                    <i class="bi bi-cart-plus fs-5"></i>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -91,71 +123,121 @@
       </swiper>
     </div>
   </div>
-  <div class="container bg-white mt-8">
-    <div class="row mb-5">
-      <div class="col-md-6 p-0 position-relative" v-if="lastProduct">
-        <div
-          class="position-absolute top-50 start-50 translate-middle w-100 h-50 text-center"
-        >
-          <img
-            :src="lastProduct?.imagesUrl[1]"
-            class="img-fluid object-fit-cover newsimg"
-            alt="picture"
-            @click="openModal(lastProduct)"
-          />
-          <p class="card-title mt-2">{{ lastProduct.title }}</p>
-          <p class="card-title text-brown">${{ lastProduct.price }}</p>
+  <div class="container-fluid mt-8">
+    <swiper :navigation="true" :modules="modules" class="mySwiper">
+      <swiper-slide>
+        <div class="row pc">
+          <div
+            class="col-md-6 p-0 bg-white d-flex justify-content-start text-start"
+            v-if="lastProduct"
+            style="width: 600px"
+          >
+            <div class="ms-5">
+              <p class="fs-1 mt-8">新品上市</p>
+              <p class="card-title fs-5 mt-6 mb-3">
+                {{ lastProduct.title }}
+              </p>
+              <span class="card-title text-brown fs-5"
+                >${{ $filters.numberToCurrencyNo(lastProduct.price) }}</span
+              >
+              <p class="fs-6 my-5" style="width: 300px">
+                {{ lastProduct.content }}
+              </p>
+              <p
+                class="mb-3 fs-6 cursor-pointer text-decoration-underline"
+                @click="openModal(lastProduct)"
+              >
+                立即選購 >>
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 p-0 position-relative cursor-pointer">
+            <img
+              :src="lastProduct?.imagesUrl[0]"
+              class="img-fluid object-fit-cover w-100"
+              style="height: 600px"
+              alt="picture"
+              @click="openModal(lastProduct)"
+            />
+          </div>
         </div>
-      </div>
-      <div class="col-md-6 p-0 position-relative cursor-pointer">
+      </swiper-slide>
+      <swiper-slide>
+        <div class="row pc">
+          <div
+            class="col-md-6 p-0 bg-white d-flex justify-content-start text-start"
+            v-if="secondLastProduct"
+            style="width: 600px"
+          >
+            <div class="ms-5">
+              <p class="fs-1 mt-8">新品上市</p>
+              <p class="card-title fs-5 mt-6 mb-3">
+                {{ secondLastProduct.title }}
+              </p>
+              <span class="card-title text-brown fs-5"
+                >${{
+                  $filters.numberToCurrencyNo(secondLastProduct.price)
+                }}</span
+              >
+              <p class="fs-6 my-5" style="width: 300px">
+                {{ secondLastProduct.content }}
+              </p>
+              <p
+                class="mb-3 fs-6 cursor-pointer text-decoration-underline"
+                @click="openModal(secondLastProduct)"
+              >
+                立即選購 >>
+              </p>
+            </div>
+          </div>
+          <div class="col-md-6 p-0 position-relative cursor-pointer">
+            <img
+              :src="secondLastProduct?.imagesUrl[0]"
+              class="img-fluid object-fit-cover w-100"
+              style="height: 600px"
+              alt="picture"
+              @click="openModal(secondLastProduct)"
+            />
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper>
+    <div class="row newProduct mobile">
+      <div class="col-12 position-relative cursor-pointer">
         <img
           :src="lastProduct?.imagesUrl[0]"
           class="img-fluid object-fit-cover w-100"
-          style="height: 700px"
+          style="height: 600px"
           alt="picture"
           @click="openModal(lastProduct)"
         />
-        <p
+        <a
           class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-white fs-4"
-          >
+        >
           新品上市
-        </p>
+        </a>
       </div>
     </div>
-    <div class="row flex-row-reverse">
-      <div class="col-md-6 col-12 p-0 position-relative" v-if="secondLastProduct">
-        <div
-          class="position-absolute top-50 start-50 translate-middle w-100 h-50 text-center"
-        >
-          <img
-            :src="secondLastProduct?.imagesUrl[1]"
-            class="img-fluid object-fit-cover newsimg"
-            alt="picture"
-            @click="openModal(secondLastProduct)"
-          />
-          <p class="card-title mt-2">{{ secondLastProduct.title }}</p>
-          <p class="card-title text-brown">${{ secondLastProduct.price }}</p>
-        </div>
-      </div>
-      <div class="col-md-6 col-12 p-0 position-relative cursor-pointer">
+    <div class="row newProduct mobile">
+      <div class="col-12 position-relative cursor-pointer">
         <img
           :src="secondLastProduct?.imagesUrl[0]"
           class="img-fluid object-fit-cover w-100"
-          style="height: 700px"
+          style="height: 600px"
           alt="picture"
           @click="openModal(secondLastProduct)"
         />
         <a
           class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-white fs-4"
-          >
+        >
           新品上市
         </a>
       </div>
     </div>
   </div>
   <div class="container mt-8">
-    <div class="row p-5">
-      <div class="col-md-4 col-12 p-0 mb-3 position-relative">
+    <div class="row">
+      <div class="col-md-4 col-12 mb-3 position-relative category">
         <RouterLink
           class="text-decoration-none"
           to="/products?category=生活用品"
@@ -163,7 +245,7 @@
         >
           <img
             src="../../../public/images/6.png"
-            class="img-fluid w-80 opacity-50"
+            class="img-fluid w-100 object-fit-cover rounded-3"
             style="height: 400px"
             alt="productPicture"
           />
@@ -174,7 +256,7 @@
           </p>
         </RouterLink>
       </div>
-      <div class="col-md-4 col-12 p-0 mb-3 position-relative">
+      <div class="col-md-4 col-12 mb-3 position-relative category">
         <RouterLink
           class="text-decoration-none"
           to="/products?category=時尚配件"
@@ -182,7 +264,7 @@
         >
           <img
             src="../../../public/images/2.png"
-            class="img-fluid w-80 opacity-50"
+            class="img-fluid w-100 object-fit-cover rounded-3"
             style="height: 400px"
             alt="productPicture"
           />
@@ -193,7 +275,7 @@
           </p>
         </RouterLink>
       </div>
-      <div class="col-md-4 col-12 p-0 mb-3 position-relative">
+      <div class="col-md-4 col-12 mb-3 position-relative category">
         <RouterLink
           class="text-decoration-none"
           to="/products?category=休閒娛樂"
@@ -201,7 +283,7 @@
         >
           <img
             src="../../../public/images/3.png"
-            class="img-fluid w-80 opacity-50"
+            class="img-fluid w-100 object-fit-cover rounded-3"
             style="height: 400px"
             alt="productPicture"
           />
@@ -214,8 +296,7 @@
       </div>
     </div>
   </div>
-</div>
-<ToastMessages></ToastMessages>
+  <ToastMessages />
 </template>
 
 <script>
@@ -240,6 +321,7 @@ export default {
   setup () {
     const goToShop = () => {
       router.push('/products')
+      window.scrollTo(0, 0)
     }
     const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
     const router = useRouter()
@@ -251,6 +333,7 @@ export default {
     const status = ref({
       loadingItem: ''
     })
+    const isLoading = ref(false)
     const toastMessageStore = useToastMessageStore()
     const { pushMessage } = toastMessageStore
     const addToCart = (id) => {
@@ -271,10 +354,12 @@ export default {
       })
     }
     const getData = (page = 2) => {
+      isLoading.value = true
       axios
         .get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/products?page=${page}`)
         .then((res) => {
           products.value = res.data.products
+          isLoading.value = false
         })
         .catch((err) => {
           // eslint-disable-next-line no-alert
@@ -316,7 +401,8 @@ export default {
         .get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/products/all`)
         .then((res) => {
           if (res.data.success && res.data.products.length > 0) {
-            secondLastProduct.value = res.data.products[res.data.products.length - 2]
+            secondLastProduct.value =
+              res.data.products[res.data.products.length - 2]
           }
         })
         .catch((err) => {
@@ -327,7 +413,7 @@ export default {
     const slidesPerView = ref(4)
     const setSlidesPerView = () => {
       if (window.innerWidth <= 767) {
-        slidesPerView.value = 2
+        slidesPerView.value = 1
       } else {
         slidesPerView.value = 4
       }
@@ -351,6 +437,7 @@ export default {
       handleCategoryClick,
       id,
       status,
+      isLoading,
       lastProduct,
       secondLastProduct,
       slidesPerView
@@ -365,8 +452,24 @@ export default {
 </script>
 
 <style>
+@media screen and (max-width: 767px) {
+  .pc {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+  .newProduct {
+    margin-top: 80px;
+  }
+}
+@media screen and (min-width: 768px) {
+  .mobile {
+    display: none;
+  }
+}
 #swiper {
-  height: 450px;
+  height: 550px;
 }
 html,
 body {
@@ -416,13 +519,21 @@ body {
 }
 .card:hover {
   cursor: pointer;
+  transform: scale(1.02);
 }
 .newsimg {
   width: 500px;
   height: 400px;
   cursor: pointer;
 }
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
+}
+.category {
+  opacity: 0.5;
+}
+.category:hover {
+  opacity: 1;
+  transition: ease-in-out 0.3s;
 }
 </style>

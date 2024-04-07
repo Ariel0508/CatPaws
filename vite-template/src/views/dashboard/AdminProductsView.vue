@@ -1,5 +1,9 @@
 <template>
     <div id="app">
+      <VueLoading :active="isLoading" :is-full-page="true" :background-color="'#FFF8F1'" :opacity="1" :z-index="1060">
+    <img src="../../assets/loading.gif" width="500" alt="loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+  </VueLoading>
+
       <div class="container p-0">
         <div class="m-3 d-flex justify-content-end">
           <button type="button" class="btn btn-primary" @click="openModal('new')">
@@ -99,28 +103,35 @@ export default {
     const delModalRef = ref(null)
     const status = ref(false)
     const router = useRouter()
-
+    const isLoading = ref(false)
     // 2.取得產品資料
     const getData = (page = 1) => {
+      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products?page=${page}`
+      isLoading.value = true
       axios
-        .get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products?page=${page}`)
+        .get(url)
         .then((res) => {
           products.value = res.data.products
           pagination.value = res.data.pagination
+          isLoading.value = false
         })
         .catch((err) => {
           // eslint-disable-next-line no-alert
           alert(err.response.data.message)
+          isLoading.value = false
         })
     }
     // 1.確認是否登入
     const checkLogin = () => {
+      isLoading.value = true
       axios.post(`${VITE_APP_URL}/api/user/check`)
         .then(() => {
           getData()
+          isLoading.value = false
         })
         .catch(() => {
           router.push('/login')
+          isLoading.value = false
         })
     }
 
@@ -156,6 +167,7 @@ export default {
       tempProduct,
       openModal,
       status,
+      isLoading,
       getData,
       pagination,
       delModalRef,
