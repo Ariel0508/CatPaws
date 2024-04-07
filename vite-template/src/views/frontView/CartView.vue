@@ -533,7 +533,6 @@ export default {
       () => carts.value,
       () => {
         getCartList()
-        getCart()
       }
     )
     onMounted(() => {

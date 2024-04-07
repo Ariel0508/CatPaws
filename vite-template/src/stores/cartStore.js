@@ -24,7 +24,7 @@ export const useCartStore = defineStore('cart', () => {
       carts.value = res.data.data.carts
       finalTotal.value = res.data.data.final_total
       total.value = res.data.data.total
-      console.log(carts.value)
+      // console.log(carts.value)
     })
   }
   const getCartList = () => {
