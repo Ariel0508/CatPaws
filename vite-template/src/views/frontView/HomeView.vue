@@ -462,6 +462,9 @@ export default {
   .newProduct {
     margin-top: 80px;
   }
+  .mySwiper {
+    width: 100%;
+  }
 }
 @media screen and (min-width: 768px) {
   .mobile {

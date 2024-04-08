@@ -171,25 +171,24 @@
               <td></td>
               <td></td>
               <td class="p-3">
-                <div
-                  class="d-flex justify-content-center align-items-center p-0"
-                >
-                  <div
-                    class="d-flex justify-content-center align-items-center p-0"
-                    style="
-                      width: 185px;
-                      height: 40px;
-                      background: #ffffff;
-                      border: 1px solid #e9b888;
-                    "
-                  >
-                    <a
-                      class="loginbtn text-center bg-brown d-block"
-                      @click="goToOrder"
-                      >立即結帳</a
-                    >
-                  </div>
-                </div>
+                <div class="d-flex justify-content-center text-brown">
+              <div
+                class="d-flex align-items-center justify-content-center"
+                style="
+                  width: 185px;
+                  height: 40px;
+                  background: #ffffff;
+                  border: 1px solid #a2672d;
+                "
+              >
+                <a
+                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                  style="width: 175px; height: 30px; line-height: 30px"
+                  @click="goToOrder"
+                  >立即結帳
+                </a>
+              </div>
+            </div>
               </td>
             </tr>
           </tfoot>
@@ -216,9 +215,7 @@
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div>
-                  ${{ $filters.numberToCurrencyNo(cart.total) }}
-                </div>
+                <div>${{ $filters.numberToCurrencyNo(cart.total) }}</div>
               </div>
               <div class="col-5">
                 <div class="input-group w-100 pt-4">
@@ -302,21 +299,22 @@
             <div class="text-black text-end mt-3 fs-5">
               總計：${{ $filters.numberToCurrencyNo(carts.total) }}元
             </div>
-            <div class="d-flex justify-content-end align-items-center my-4">
+            <div class="d-flex justify-content-end text-brown my-3">
               <div
-                class="d-flex justify-content-center align-items-center p-0"
+                class="d-flex align-items-center justify-content-center"
                 style="
                   width: 185px;
                   height: 40px;
                   background: #ffffff;
-                  border: 1px solid #e9b888;
+                  border: 1px solid #a2672d;
                 "
               >
                 <a
-                  class="loginbtn text-center bg-brown d-block"
+                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                  style="width: 175px; height: 30px; line-height: 30px"
                   @click="goToOrder"
-                  >立即結帳</a
-                >
+                  >立即結帳
+                </a>
               </div>
             </div>
           </div>
@@ -377,11 +375,6 @@ export default {
         products.value = res.data.products
         isLoading.value = false
         // console.log(res.data.products)
-      })
-    }
-    const openModal = (product) => {
-      router.push(`/product/${product.id}`).then(() => {
-        window.scrollTo(0, 0)
       })
     }
     // eslint-disable-next-line camelcase
@@ -470,24 +463,6 @@ export default {
         getCartList()
       })
     }
-    const addToCart = (id) => {
-      status.value.loadingItem = id
-      const order = {
-        product_id: id,
-        qty: 1
-      }
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart`
-      axios.post(url, { data: order }).then((res) => {
-        status.value.loadingItem = ''
-        pushMessage({
-          style: 'success',
-          title: '加入購物車',
-          content: res.data.message
-        })
-        getCart()
-        getCartList()
-      })
-    }
 
     const removeCartItem = (id) => {
       status.value.loadingItem = id
@@ -503,7 +478,6 @@ export default {
         getCartList()
       })
     }
-
     const updateCart = (data) => {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart/${data.id}`
       const cart = {
@@ -543,7 +517,6 @@ export default {
     return {
       products,
       id,
-      openModal,
       carts,
       status,
       isLoading,
@@ -554,7 +527,6 @@ export default {
       coupon_code,
       goToOrder,
       removeCartItem,
-      addToCart,
       getProducts,
       getCartList,
       updateCart
@@ -567,16 +539,6 @@ export default {
 </script>
 
 <style>
-.loginbtn {
-  width: 175px;
-  height: 30px;
-  color: #ffffff;
-  font-size: 20px;
-  letter-spacing: 4.8px;
-  user-select: none;
-  margin: 5px;
-  text-decoration: none;
-}
 #addCoupon {
   width: 70%;
 }

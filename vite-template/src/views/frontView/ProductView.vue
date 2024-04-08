@@ -38,10 +38,10 @@
         </ol>
       </nav>
       <div class="row mt-5">
-        <div class="col-md-6 col-12">
+        <div class="col-lg-6 col-12">
           <ImageComponent :imageList="imagesUrl" class="mb-8"></ImageComponent>
         </div>
-        <div class="col-md-6 col-12 d-flex flex-column justify-content-between">
+        <div class="col-lg-6 col-12 d-flex flex-column justify-content-between">
           <div class="fs-4 mb-4">{{ product.title }}</div>
           <div class="mb-4">
             <div
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <div class="input-group w-100 mb-4">
+          <div class="input-group mb-4 w-100">
             <button
               type="button"
               class="btn btn-outline-lightBrown"
@@ -93,44 +93,61 @@
             </button>
           </div>
 
-          <div class="d-flex justify-content-between mb-3">
-            <div
-              class="d-flex justify-content-center align-items-center me-2 mBtn"
-            >
-              <button
-                type="button"
-                class="loginbtn text-center bg-lightBrown border-0"
-                @click="addToCart(product.id)"
+          <div class="d-flex mb-3 justify-content-between">
+            <div class="d-flex justify-content-center text-brown">
+              <div
+                class="d-flex align-items-center justify-content-center"
+                style="
+                  width: 150px;
+                  height: 40px;
+                  background: #ffffff;
+                  border: 1px solid #e8b887;
+                "
               >
-                <span
+                <div
+                  class="text-center bg-lightBrown text-white m-1 btnHover"
+                  style="width: 140px; height: 30px; line-height: 30px"
+                  @click="addToCart(product.id)"
+                  >
+                  <span
                   v-if="product.id === status.loadingItem"
                   class="spinner-border spinner-border-sm"
                   aria-hidden="true"
                 >
                 </span>
-                加入購物車
-              </button>
+                  加入購物車
+                </div>
+              </div>
             </div>
-            <div
-              class="d-flex justify-content-center align-items-center mBtn"
-            >
-              <RouterLink
-                class="loginbtn text-center bg-brown"
-                to="/cart"
-                @click="addToCart(product.id)"
-                >立即購買</RouterLink
+            <div class="d-flex justify-content-center text-brown">
+              <div
+                class="d-flex align-items-center justify-content-center"
+                style="
+                  width: 150px;
+                  height: 40px;
+                  background: #ffffff;
+                  border: 1px solid #a2672d;
+                "
               >
+                <RouterLink
+                  to="/cart"
+                  class="text-center bg-brown text-decoration-none text-white m-1"
+                  style="width: 140px; height: 30px; line-height: 30px"
+                  @click="addToCart(product.id)"
+                  >立即購買
+                </RouterLink>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row mt-8">
+      <div class="mt-8">
         <div class="fs-6 mb-4">商品詳情:</div>
         <div style="white-space: pre-wrap">
           {{ product.description }}
         </div>
       </div>
-      <div class="row mt-5" v-for="image in imagesUrl" :key="image">
+      <div class="mt-5" v-for="image in imagesUrl" :key="image">
         <li class="list-unstyled mb-3 col-12 col-md-7">
           <img :src="image" class="w-100" alt="" />
         </li>
@@ -157,7 +174,6 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div class="row">
             <div
               class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
               @click="openModal(product)"
@@ -204,12 +220,12 @@
                     v-if="product.id === status.loadingItem"
                     class="spinner-border spinner-border-sm"
                     aria-hidden="true"
-                  ></span>
+                  >
+                </span>
                   <i class="bi bi-cart-plus"></i>
                 </button>
               </div>
             </div>
-          </div>
         </swiper-slide>
       </swiper>
     </div>
@@ -265,15 +281,7 @@ export default {
           isLoading.value = false
         })
     }
-    const openModal = (product) => {
-      gProduct.value = product
-      getProduct()
-      router.push(`/product/${product.id}`).then(() => {
-        window.scrollTo(0, 0)
-      })
-    }
     const product = ref({})
-    // const cart = ref({})
     const imagesUrl = ref([])
     const qty = ref(1)
     const gProduct = ref(route.params)
@@ -287,10 +295,15 @@ export default {
           product.value = res.data.product
           imagesUrl.value = res.data.product.imagesUrl
           isLoading.value = false
-          // console.log(res.data.product.imagesUrl)
-          // console.log(res.data.product)
-          // console.log(res.data.product);
         })
+    }
+    getProduct()
+    const openModal = (product) => {
+      gProduct.value = product
+      getProduct()
+      router.push(`/product/${product.id}`).then(() => {
+        window.scrollTo(0, 0)
+      })
     }
     const categories = ref(['時尚配件', '休閒娛樂', '生活用品'])
     const getProducts = () => {
@@ -322,7 +335,6 @@ export default {
         window.scrollTo(0, 0)
       })
     }
-    getProduct()
     const slidesPerView = ref(4)
     const setSlidesPerView = () => {
       if (window.innerWidth <= 767) {
@@ -335,7 +347,6 @@ export default {
       () => route.query,
       () => {
         getProducts()
-        getProduct()
         getCart()
       }
     )
@@ -378,24 +389,6 @@ export default {
 </script>
 
 <style>
-.mBtn {
-  width: 185px;
-  height: 40px;
-  background: #ffffff;
-  border: 1px solid #e9b888;
-}
-
-.loginbtn {
-  width: 175px;
-  height: 30px;
-  color: #ffffff;
-  font-size: 20px;
-  letter-spacing: 4.8px;
-  user-select: none;
-  margin: 5px;
-  text-decoration: none;
-}
-
 #swiper {
   height: 550px;
 }
@@ -451,25 +444,12 @@ body {
   cursor: pointer;
   scale: 1.02;
 }
-
-@media screen and (max-width: 768px) {
-  .mBtn {
-    width: 150px;
-    height: 40px;
-    background: #ffffff;
-    border: 1px solid #e9b888;
-      }
-
-  .loginbtn {
-    width: 140px;
-    height: 30px;
-    color: #ffffff;
-    font-size: 16px;
-    letter-spacing: 3.2px;
-    user-select: none;
-    margin: 5px;
-    text-decoration: none;
-    padding-top: 4px;
+.btnHover{
+  cursor: pointer;
+}
+@media only screen and (max-width: 767px) {
+  .mySwiper {
+    width: 100%;
   }
 }
 </style>

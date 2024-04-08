@@ -142,7 +142,6 @@
           </div>
         </div>
       </div>
-      <!-- form -->
       <div class="row justify-content-center mt-5">
         <v-form
           ref="formRef"
@@ -241,8 +240,9 @@
           </div>
           <div class="text-end py-5">
             <button type="submit" class="btn p-0 border-0">
+              <div class="d-flex justify-content-center text-brown">
               <div
-                class="d-flex justify-content-center align-items-center p-0"
+                class="d-flex align-items-center justify-content-center"
                 style="
                   width: 185px;
                   height: 40px;
@@ -250,10 +250,13 @@
                   border: 1px solid #a2672d;
                 "
               >
-                <div class="loginbtn text-center bg-brown d-block">
-                  <div>送出訂單</div>
-                </div>
+                <a
+                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                  style="width: 175px; height: 30px; line-height: 30px"
+                  >送出訂單
+                </a>
               </div>
+            </div>
             </button>
           </div>
         </v-form>
@@ -340,16 +343,6 @@ onMounted(() => {
 </script>
 
 <style>
-.loginbtn {
-  width: 175px;
-  height: 30px;
-  color: #ffffff;
-  font-size: 20px;
-  letter-spacing: 4.8px;
-  user-select: none;
-  margin: 5px;
-  text-decoration: none;
-}
 @media screen and (max-width: 767px) {
   .pc {
     display: none;

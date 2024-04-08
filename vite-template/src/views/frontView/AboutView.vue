@@ -68,7 +68,7 @@
   <div class="container fs-6 mb-5">
     <div class="text-center mb-3">
       <i class="bi bi-telephone-fill me-3"></i>
-      連絡電話:02-123456
+      連絡電話:02-12345678
     </div>
     <div class="text-center">
       <i class="bi bi-geo-alt-fill me-3"></i>

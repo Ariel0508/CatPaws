@@ -135,22 +135,23 @@
         <div class="text-end" v-if="order.is_paid === false">
           <div>
             <button type="submit" class="btn p-0 border-0">
+              <div class="d-flex justify-content-center text-brown">
               <div
-                class="d-flex justify-content-center align-items-center p-0"
+                class="d-flex align-items-center justify-content-center"
                 style="
                   width: 185px;
                   height: 40px;
                   background: #ffffff;
-                  border: 1px solid #e9b888;
+                  border: 1px solid #a2672d;
                 "
               >
-                <button
-                  type="submit"
-                  class="loginbtn text-center bg-lightBrown border-0"
-                >
-                  確認付款去
-                </button>
+                <a
+                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                  style="width: 175px; height: 30px; line-height: 30px"
+                  >確認付款
+                </a>
               </div>
+            </div>
             </button>
           </div>
         </div>
