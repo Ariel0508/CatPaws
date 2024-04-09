@@ -185,7 +185,7 @@
       >
         <swiper-slide v-for="product in products" :key="product.id">
           <div
-          style="height:480px;"
+          style="height:450px;"
             class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 p-0"
             @click="openModal(product)"
           >
@@ -381,7 +381,7 @@ export default {
 
 <style>
 #swiper {
-  height: 550px;
+  height: 100%;
 }
 
 html,
@@ -390,20 +390,25 @@ body {
   height: 100%;
 }
 
+body {
+  background: #fff8f1;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
+}
+
 .swiper {
   width: 100%;
   height: 100%;
 }
 
-.swiper-wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: vanilla;
+  background: #fff8f1;
+
   /* Center slide text vertically */
   display: flex;
   justify-content: center;
