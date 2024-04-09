@@ -162,6 +162,7 @@
     <div id="swiper">
       <swiper
         :slidesPerView="slidesPerView"
+        :centeredSlides="true"
         :grabCursor="true"
         :spaceBetween="30"
         :pagination="{
@@ -175,7 +176,7 @@
       >
         <swiper-slide v-for="product in products" :key="product.id">
             <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
+              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 p-0"
               @click="openModal(product)"
             >
               <span
