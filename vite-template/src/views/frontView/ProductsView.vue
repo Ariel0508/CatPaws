@@ -29,7 +29,9 @@
             >
           </li>
           <li class="breadcrumb-item active" aria-current="page">產品</li>
-          <li class="breadcrumb-item active" aria-current="page">{{ pagination.category }}</li>
+          <li class="breadcrumb-item active" aria-current="page" v-if="pagination.category !== ''">
+            {{ pagination.category }}
+          </li>
         </ol>
       </nav>
       <div class="row mt-5">

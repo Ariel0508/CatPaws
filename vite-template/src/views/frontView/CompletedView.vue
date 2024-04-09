@@ -416,16 +416,6 @@ export default {
     display: none;
   }
 }
-.loginbtn {
-  width: 175px;
-  height: 30px;
-  color: #ffffff;
-  font-size: 20px;
-  letter-spacing: 4.8px;
-  user-select: none;
-  margin: 5px;
-  text-decoration: none;
-}
 #swiper {
   height: 550px;
 }

@@ -173,7 +173,7 @@
               <td class="p-3">
                 <div class="d-flex justify-content-center text-brown">
               <div
-                class="d-flex align-items-center justify-content-center"
+                class="d-flex align-items-center justify-content-center btnHover"
                 style="
                   width: 185px;
                   height: 40px;
@@ -182,7 +182,7 @@
                 "
               >
                 <a
-                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                  class="text-center bg-brown text-decoration-none text-white m-1 d-block btnHover"
                   style="width: 175px; height: 30px; line-height: 30px"
                   @click="goToOrder"
                   >立即結帳
@@ -301,7 +301,7 @@
             </div>
             <div class="d-flex justify-content-end text-brown my-3">
               <div
-                class="d-flex align-items-center justify-content-center"
+                class="d-flex align-items-center justify-content-center btnHover"
                 style="
                   width: 185px;
                   height: 40px;
@@ -539,6 +539,9 @@ export default {
 </script>
 
 <style>
+.btnHover{
+  cursor: pointer;
+}
 #addCoupon {
   width: 70%;
 }
