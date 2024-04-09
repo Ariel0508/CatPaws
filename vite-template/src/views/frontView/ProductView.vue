@@ -108,13 +108,13 @@
                   class="text-center bg-lightBrown text-white m-1"
                   style="width: 140px; height: 30px; line-height: 30px"
                   @click="addToCart(product.id)"
-                  >
-                  <span
-                  v-if="product.id === status.loadingItem"
-                  class="spinner-border spinner-border-sm"
-                  aria-hidden="true"
                 >
-                </span>
+                  <span
+                    v-if="product.id === status.loadingItem"
+                    class="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  >
+                  </span>
                   加入購物車
                 </div>
               </div>
@@ -161,13 +161,22 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="slidesPerView"
-        :centeredSlides="true"
-        :grabCursor="true"
-        :spaceBetween="30"
+        :slidesPerView="1"
+        :spaceBetween="10"
         :pagination="{
           clickable: true,
         }"
+        :breakpoints="{
+          '640': {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          '1024': {
+            slidesPerView: 4,
+            spaceBetween: 30,
+          },
+        }"
+        :grabCursor="true"
         :freeMode="true"
         :modules="modules"
         class="mySwiper"
@@ -175,58 +184,57 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-            <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 p-0"
-              @click="openModal(product)"
+          <div
+          style="height:480px;"
+            class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 p-0"
+            @click="openModal(product)"
+          >
+            <span
+              class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
+              v-if="product.price !== product.origin_price"
+              >SALE</span
             >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
+            <img
+              :src="product.imageUrl"
+              class="card-img-top object-fit-cover w-100"
+              style="height: 300px"
+              alt="productPicture"
+            />
+            <div class="card-body">
+              <p class="card-title">{{ product.title }}</p>
+              <div
+                v-if="product.price === product.origin_price"
+                class="text-gray2 fs-5 card-title text-center"
               >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title text-center"
-                >
-                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-                </div>
-                <div
-                  v-else
-                  class="d-flex justify-content-center align-items-center card-title ms-2"
-                >
-                  <del class="text-gray2 fs-5"
-                    >${{
-                      $filters.numberToCurrencyNo(product.origin_price)
-                    }}</del
-                  >
-                  <div class="text-brown fs-5 ms-3">
-                    ${{ $filters.numberToCurrencyNo(product.price) }}
-                  </div>
-                </div>
-                <br />
-                <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
-                >
-                  <span
-                    v-if="product.id === status.loadingItem"
-                    class="spinner-border spinner-border-sm"
-                    aria-hidden="true"
-                  >
-                </span>
-                  <i class="bi bi-cart-plus"></i>
-                </button>
+                ${{ $filters.numberToCurrencyNo(product.origin_price) }}
               </div>
+              <div
+                v-else
+                class="d-flex justify-content-center align-items-center card-title ms-2"
+              >
+                <del class="text-gray2 fs-5"
+                  >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
+                >
+                <div class="text-brown fs-5 ms-3">
+                  ${{ $filters.numberToCurrencyNo(product.price) }}
+                </div>
+              </div>
+              <br />
+              <button
+                type="button"
+                class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                @click.stop="addToCart(product.id, 1)"
+              >
+                <span
+                  v-if="product.id === status.loadingItem"
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                >
+                </span>
+                <i class="bi bi-cart-plus"></i>
+              </button>
             </div>
+          </div>
         </swiper-slide>
       </swiper>
     </div>
@@ -236,7 +244,7 @@
 
 <script>
 import axios from 'axios'
-import { onMounted, ref, watch, onBeforeUnmount } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCartStore } from '../../stores/cartStore'
 import { useToastMessageStore } from '../../stores/toastMessage'
@@ -333,14 +341,6 @@ export default {
         window.scrollTo(0, 0)
       })
     }
-    const slidesPerView = ref(4)
-    const setSlidesPerView = () => {
-      if (window.innerWidth <= 767) {
-        slidesPerView.value = 1
-      } else {
-        slidesPerView.value = 4
-      }
-    }
     watch(
       () => route.query,
       () => {
@@ -352,11 +352,6 @@ export default {
       getProduct()
       getCart()
       getData()
-      setSlidesPerView()
-      window.addEventListener('resize', setSlidesPerView)
-    })
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', setSlidesPerView)
     })
 
     return {
@@ -372,7 +367,6 @@ export default {
       gProduct,
       id,
       status,
-      slidesPerView,
       isLoading
     }
   },
@@ -441,15 +435,7 @@ body {
   cursor: pointer;
   scale: 1.02;
 }
-.btnHover{
+.btnHover {
   cursor: pointer;
-}
-.mySwiper {
-    width: auto;
-  }
-@media only screen and (max-width: 767px) {
-  .mySwiper {
-    width: auto;
-  }
 }
 </style>
