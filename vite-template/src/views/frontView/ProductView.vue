@@ -227,6 +227,7 @@
         </swiper-slide>
       </swiper>
       <swiper
+        :slidesPerView="1"
         :pagination="{
           clickable: true,
         }"
