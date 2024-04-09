@@ -108,13 +108,13 @@
                   class="text-center bg-lightBrown text-white m-1"
                   style="width: 140px; height: 30px; line-height: 30px"
                   @click="addToCart(product.id)"
-                  >
-                  <span
-                  v-if="product.id === status.loadingItem"
-                  class="spinner-border spinner-border-sm"
-                  aria-hidden="true"
                 >
-                </span>
+                  <span
+                    v-if="product.id === status.loadingItem"
+                    class="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  >
+                  </span>
                   加入購物車
                 </div>
               </div>
@@ -174,123 +174,118 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-            <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
-              @click="openModal(product)"
+          <div
+            class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
+            @click="openModal(product)"
+          >
+            <span
+              class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
+              v-if="product.price !== product.origin_price"
+              >SALE</span
             >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
+            <img
+              :src="product.imageUrl"
+              class="card-img-top object-fit-cover w-100"
+              style="height: 300px"
+              alt="productPicture"
+            />
+            <div class="card-body">
+              <p class="card-title">{{ product.title }}</p>
+              <div
+                v-if="product.price === product.origin_price"
+                class="text-gray2 fs-5 card-title text-center"
               >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title text-center"
-                >
-                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-                </div>
-                <div
-                  v-else
-                  class="d-flex justify-content-center align-items-center card-title ms-2"
-                >
-                  <del class="text-gray2 fs-5"
-                    >${{
-                      $filters.numberToCurrencyNo(product.origin_price)
-                    }}</del
-                  >
-                  <div class="text-brown fs-5 ms-3">
-                    ${{ $filters.numberToCurrencyNo(product.price) }}
-                  </div>
-                </div>
-                <br />
-                <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
-                >
-                  <span
-                    v-if="product.id === status.loadingItem"
-                    class="spinner-border spinner-border-sm"
-                    aria-hidden="true"
-                  >
-                </span>
-                  <i class="bi bi-cart-plus"></i>
-                </button>
+                ${{ $filters.numberToCurrencyNo(product.origin_price) }}
               </div>
+              <div
+                v-else
+                class="d-flex justify-content-center align-items-center card-title ms-2"
+              >
+                <del class="text-gray2 fs-5"
+                  >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
+                >
+                <div class="text-brown fs-5 ms-3">
+                  ${{ $filters.numberToCurrencyNo(product.price) }}
+                </div>
+              </div>
+              <br />
+              <button
+                type="button"
+                class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                @click.stop="addToCart(product.id, 1)"
+              >
+                <span
+                  v-if="product.id === status.loadingItem"
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                >
+                </span>
+                <i class="bi bi-cart-plus"></i>
+              </button>
             </div>
+          </div>
         </swiper-slide>
       </swiper>
       <swiper
-    :spaceBetween="30"
-    :pagination="{
-      clickable: true,
-    }"
-    :modules="modules"
-    class="mySwiper mSwiper"
-  >
-  <swiper-slide v-for="product in products" :key="product.id">
-            <div
-              class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
-              @click="openModal(product)"
+        :pagination="{
+          clickable: true,
+        }"
+        :modules="modules"
+        class="mySwiper mSwiper"
+      >
+        <swiper-slide v-for="product in products" :key="product.id">
+          <div
+            class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 col-md-12 col-12 p-0"
+            @click="openModal(product)"
+          >
+            <span
+              class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
+              v-if="product.price !== product.origin_price"
+              >SALE</span
             >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
+            <img
+              :src="product.imageUrl"
+              class="card-img-top object-fit-cover w-100"
+              style="height: 300px"
+              alt="productPicture"
+            />
+            <div class="card-body">
+              <p class="card-title">{{ product.title }}</p>
+              <div
+                v-if="product.price === product.origin_price"
+                class="text-gray2 fs-5 card-title text-center"
               >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title text-center"
-                >
-                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-                </div>
-                <div
-                  v-else
-                  class="d-flex justify-content-center align-items-center card-title ms-2"
-                >
-                  <del class="text-gray2 fs-5"
-                    >${{
-                      $filters.numberToCurrencyNo(product.origin_price)
-                    }}</del
-                  >
-                  <div class="text-brown fs-5 ms-3">
-                    ${{ $filters.numberToCurrencyNo(product.price) }}
-                  </div>
-                </div>
-                <br />
-                <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
-                >
-                  <span
-                    v-if="product.id === status.loadingItem"
-                    class="spinner-border spinner-border-sm"
-                    aria-hidden="true"
-                  >
-                </span>
-                  <i class="bi bi-cart-plus"></i>
-                </button>
+                ${{ $filters.numberToCurrencyNo(product.origin_price) }}
               </div>
+              <div
+                v-else
+                class="d-flex justify-content-center align-items-center card-title ms-2"
+              >
+                <del class="text-gray2 fs-5"
+                  >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
+                >
+                <div class="text-brown fs-5 ms-3">
+                  ${{ $filters.numberToCurrencyNo(product.price) }}
+                </div>
+              </div>
+              <br />
+              <button
+                type="button"
+                class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                @click.stop="addToCart(product.id, 1)"
+              >
+                <span
+                  v-if="product.id === status.loadingItem"
+                  class="spinner-border spinner-border-sm"
+                  aria-hidden="true"
+                >
+                </span>
+                <i class="bi bi-cart-plus"></i>
+              </button>
             </div>
+          </div>
         </swiper-slide>
-  </swiper>
+      </swiper>
     </div>
   </div>
   <ToastMessages />
@@ -489,18 +484,18 @@ body {
   cursor: pointer;
   scale: 1.02;
 }
-.btnHover{
+.btnHover {
   cursor: pointer;
 }
 .mSwiper {
   display: none;
 }
 @media only screen and (max-width: 767px) {
-.mSwiper {
-  display: block;
-}
-.pSwiper {
-  display: none;
-}
+  .mSwiper {
+    display: block;
+  }
+  .pSwiper {
+    display: none;
+  }
 }
 </style>

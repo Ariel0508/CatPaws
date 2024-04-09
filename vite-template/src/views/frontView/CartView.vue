@@ -44,18 +44,18 @@
               <td>
                 <div>
                   <img
-                    :src="cart.product.imageUrl"
-                    class="img-fluid object-fit-cover"
-                    style="width: 80px; height: 80px"
-                    alt=""
-                  />
+                      :src="cart.product.imageUrl"
+                      class="img-fluid object-fit-cover"
+                      style="width: 80px; height: 80px"
+                      alt=""
+                    />
+                  <RouterLink
+                    class="text-decoration-none text-black"
+                    :to="`/product/${cart.product.id}`"
+                  >
+                    {{ cart.product.title }}
+                  </RouterLink>
                 </div>
-                <RouterLink
-                  class="text-decoration-none text-black"
-                  :to="`/product/${cart.product.id}`"
-                >
-                  {{ cart.product.title }}</RouterLink
-                >
               </td>
               <td>${{ $filters.numberToCurrencyNo(cart.product.price) }}</td>
               <td>
@@ -172,23 +172,23 @@
               <td></td>
               <td class="p-3">
                 <div class="d-flex justify-content-center text-brown">
-              <div
-                class="d-flex align-items-center justify-content-center btnHover"
-                style="
-                  width: 185px;
-                  height: 40px;
-                  background: #ffffff;
-                  border: 1px solid #a2672d;
-                "
-              >
-                <a
-                  class="text-center bg-brown text-decoration-none text-white m-1 d-block btnHover"
-                  style="width: 175px; height: 30px; line-height: 30px"
-                  @click="goToOrder"
-                  >立即結帳
-                </a>
-              </div>
-            </div>
+                  <div
+                    class="d-flex align-items-center justify-content-center btnHover"
+                    style="
+                      width: 185px;
+                      height: 40px;
+                      background: #ffffff;
+                      border: 1px solid #a2672d;
+                    "
+                  >
+                    <a
+                      class="text-center bg-brown text-decoration-none text-white m-1 d-block btnHover"
+                      style="width: 175px; height: 30px; line-height: 30px"
+                      @click="goToOrder"
+                      >立即結帳
+                    </a>
+                  </div>
+                </div>
               </td>
             </tr>
           </tfoot>
@@ -539,7 +539,7 @@ export default {
 </script>
 
 <style>
-.btnHover{
+.btnHover {
   cursor: pointer;
 }
 #addCoupon {
