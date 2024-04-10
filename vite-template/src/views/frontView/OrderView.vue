@@ -65,26 +65,53 @@
           </tbody>
           <tfoot>
             <tr class="border-white">
-              <td></td>
-              <td class="text-black text-end my-3">
-                總計：<span
-                  >${{ $filters.numberToCurrencyNo(carts.total) }}</span
-                >
+              <td colspan="2" class="pt-4">
+                <div class="d-flex align-items-center justify-content-end">
+                  <i class="bi bi-ticket-perforated fs-2 text-brown pe-3"></i>
+                  <select
+                    name="addCoupon"
+                    id="addCoupon"
+                    class="form-select rounded w-50 p-2 fs-6"
+                    v-model="coupon_code"
+                    @change="addCouponCode"
+                  >
+                    <option value="請輸入優惠券" selected>請輸入優惠券</option>
+                    <option value="newMember20%">新會員首購八折優惠</option>
+                    <option value="purchasesover200010%">
+                      滿兩千享九折優惠
+                    </option>
+                  </select>
+                </div>
               </td>
-              <td class="text-lightBrown text-center my-3">
-                折扣：${{
-                  $filters.numberToCurrencyNo(
-                    Math.floor(carts.total - carts.final_total)
-                  )
-                }}
+              <td class="text-center pt-4">
+                <div class="me-5">
+                  總計：<span
+                    >${{ $filters.numberToCurrencyNo(carts.total) }}</span
+                  >
+                </div>
               </td>
-              <td class="p-3 fs-5" colspan="2">
-                訂單金額({{ carts?.carts?.length }}商品)：
-                <span class="text-brown"
+              <td class="text-center pt-4">
+                折扣：<span class="text-brown"
                   >${{
-                    $filters.numberToCurrencyNo(Math.ceil(carts.final_total))
-                  }}元</span
+                    $filters.numberToCurrencyNo(
+                      Math.floor(carts.total - carts.final_total)
+                    )
+                  }}</span
                 >
+              </td>
+            </tr>
+            <tr class="border-white">
+              <td></td>
+              <td></td>
+              <td class="fs-5 text-end py-4" colspan="2">
+                <div class="me-8">
+                  訂單金額({{ carts?.carts?.length }}商品)：
+                  <span class="text-brown"
+                    >${{
+                      $filters.numberToCurrencyNo(Math.ceil(carts.final_total))
+                    }}元</span
+                  >
+                </div>
               </td>
             </tr>
           </tfoot>
@@ -111,7 +138,7 @@
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div>
+                <div class="mt-2">
                   ${{ $filters.numberToCurrencyNo(cart.product.price) }}
                 </div>
               </div>
@@ -121,15 +148,31 @@
             </div>
           </div>
           <div class="border-top border-lightBrown p-3 bg-white">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-ticket-perforated fs-2 text-brown pe-3"></i>
+              <select
+                name="addCoupon"
+                id="addCoupon"
+                class="form-select rounded w-50 p-2 fs-6"
+                v-model="coupon_code"
+                @change="addCouponCode"
+              >
+                <option value="請輸入優惠券" selected>請輸入優惠券</option>
+                <option value="newMember20%">新會員首購八折優惠</option>
+                <option value="purchasesover200010%">滿兩千享九折優惠</option>
+              </select>
+            </div>
             <div class="text-black text-end mt-3">
               總計：<span>${{ $filters.numberToCurrencyNo(carts.total) }}</span>
             </div>
-            <div class="text-lightBrown text-end mt-3">
-              折扣：${{
-                $filters.numberToCurrencyNo(
-                  Math.floor(carts.total - carts.final_total)
-                )
-              }}
+            <div class=" text-end mt-3">
+              折扣：<span class="text-brown">
+                ${{
+                  $filters.numberToCurrencyNo(
+                    Math.floor(carts.total - carts.final_total)
+                  )
+                }}
+              </span>
             </div>
             <div class="fs-5 text-end mt-3">
               訂單金額({{ carts?.carts?.length }}商品)：
@@ -241,62 +284,58 @@
           <div class="text-end py-5">
             <button type="submit" class="btn p-0 border-0">
               <div class="d-flex justify-content-center text-brown">
-              <div
-                class="d-flex align-items-center justify-content-center"
-                style="
-                  width: 185px;
-                  height: 40px;
-                  background: #ffffff;
-                  border: 1px solid #a2672d;
-                "
-              >
-                <a
-                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
-                  style="width: 175px; height: 30px; line-height: 30px"
-                  >送出訂單
-                </a>
+                <div
+                  class="d-flex align-items-center justify-content-center"
+                  style="
+                    width: 185px;
+                    height: 40px;
+                    background: #ffffff;
+                    border: 1px solid #a2672d;
+                  "
+                >
+                  <a
+                    class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                    style="width: 175px; height: 30px; line-height: 30px"
+                    >送出訂單
+                  </a>
+                </div>
               </div>
-            </div>
             </button>
           </div>
         </v-form>
       </div>
     </div>
-    <CouponModaL ref="CouponModalRef"></CouponModaL>
+    <ToastMessages />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRouter } from 'vue-router'
-import CouponModaL from '../../components/CouponModal.vue'
+import { useToastMessageStore } from '../../stores/toastMessage'
+import ToastMessages from '../../components/ToastMessages.vue'
 
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
 const store = useCartStore()
 const { getCart } = store
-const carts = ref({})
+const carts = ref(store.carts)
+const router = useRouter()
 const isLoading = ref(false)
+const toastMessageStore = useToastMessageStore()
+const { pushMessage } = toastMessageStore
 const getCartList = () => {
   const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart`
-  isLoading.value = true
   axios
     .get(url)
     .then((res) => {
       carts.value = res.data.data
-      isLoading.value = false
-      // console.log(carts.value)
     })
-    .catch((err) => {
-      alert(err.response.data.message)
+    .catch(() => {
       isLoading.value = false
     })
 }
-const CouponModalRef = ref(null)
-// const openModal = () => {
-//   CouponModalRef.value.oModal()
-// }
 const formRef = ref(null)
 const form = ref({
   user: {
@@ -307,8 +346,21 @@ const form = ref({
   },
   message: ''
 })
-const router = useRouter()
+
 const createOrder = () => {
+  // eslint-disable-next-line camelcase
+  if (
+    // eslint-disable-next-line camelcase
+    coupon_code.value === 'purchasesover200010%' &&
+    carts.value.total < 2000
+  ) {
+    pushMessage({
+      style: 'danger',
+      title: '無法使用優惠券',
+      content: '購物車金額需達到2000元才能使用優惠券'
+    })
+    return
+  }
   const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/order`
   const order = form.value
   isLoading.value = true
@@ -320,22 +372,76 @@ const createOrder = () => {
         isLoading.value = false
       }
       router.push(`/completed/${response.data.orderId}`)
+      localStorage.removeItem('coupon_code')
     })
-    .catch((err) => {
-      // eslint-disable-next-line no-alert
-      alert(err.response.data.message)
+    .catch(() => {
       isLoading.value = false
     })
-  localStorage.removeItem('coupon_code')
   window.scrollTo(0, 0)
 }
 const isPhone = (value) => {
   const phoneNumber = /^(09)[0-9]{8}$/
   return phoneNumber.test(value) ? true : '需要正確的電話號碼'
 }
-// watch(() => carts.value, () => {
-//   getCartList()
-// })
+// eslint-disable-next-line camelcase
+const coupon_code = ref(localStorage.getItem('coupon_code') || '請輸入優惠券')
+const isLoadingCoupon = ref(false)
+const addCouponCode = () => {
+  // eslint-disable-next-line camelcase
+  if (
+    // eslint-disable-next-line camelcase
+    coupon_code.value === 'purchasesover200010%' &&
+    carts.value.total < 2000
+  ) {
+    pushMessage({
+      style: 'danger',
+      title: '無法使用優惠券',
+      content: '購物車金額需達到2000元才能使用優惠券'
+    })
+    return
+  }
+
+  const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/coupon`
+  const coupon = {
+    // eslint-disable-next-line camelcase
+    code: coupon_code.value
+  }
+
+  isLoadingCoupon.value = true
+
+  axios
+    .post(url, { data: coupon })
+    .then((response) => {
+      if (coupon.code === '請輸入優惠券') {
+        // 不顯示任何提示訊息
+      } else {
+        pushMessage({
+          style: 'success',
+          title: '加入優惠券',
+          content: response.data.message
+        })
+      }
+      getCart()
+      isLoadingCoupon.value = false
+    })
+    .catch(() => {
+      isLoadingCoupon.value = false
+      pushMessage({
+        style: 'danger',
+        title: '優惠券不可用'
+      })
+    })
+
+  // eslint-disable-next-line camelcase
+  localStorage.setItem('coupon_code', coupon_code.value)
+}
+
+watch(
+  () => carts.value,
+  () => {
+    getCartList()
+  }
+)
 onMounted(() => {
   getCart()
   getCartList()
@@ -356,5 +462,4 @@ onMounted(() => {
     display: none;
   }
 }
-
 </style>

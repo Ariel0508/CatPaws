@@ -66,7 +66,7 @@
           </tbody>
           <tfoot class="border-bottom border-white">
             <tr>
-              <td colspan="4" class="text-end pe-5">
+              <td colspan="4" class="text-end pe-8">
                 <div class="text-brown fs-5 text-end mt-3">
                   訂單金額：${{
                     $filters.numberToCurrencyNo(Math.floor(order.total))
@@ -98,8 +98,8 @@
               <div class="col-3 text-center">x {{ item.qty }}</div>
             </div>
           </div>
-          <div class="border-top border-lightBrown p-3 bg-white">
-            <div class="text-brown fs-5 text-end mt-3">
+          <div class="border-top border-lightBrown p-4 bg-white">
+            <div class="text-brown fs-5 text-end">
               訂單金額：${{
                 $filters.numberToCurrencyNo(Math.floor(order.total))
               }}元
@@ -136,22 +136,22 @@
           <div>
             <button type="submit" class="btn p-0 border-0">
               <div class="d-flex justify-content-center text-brown">
-              <div
-                class="d-flex align-items-center justify-content-center"
-                style="
-                  width: 185px;
-                  height: 40px;
-                  background: #ffffff;
-                  border: 1px solid #a2672d;
-                "
-              >
-                <a
-                  class="text-center bg-brown text-decoration-none text-white m-1 d-block"
-                  style="width: 175px; height: 30px; line-height: 30px"
-                  >確認付款
-                </a>
+                <div
+                  class="d-flex align-items-center justify-content-center"
+                  style="
+                    width: 185px;
+                    height: 40px;
+                    background: #ffffff;
+                    border: 1px solid #a2672d;
+                  "
+                >
+                  <a
+                    class="text-center bg-brown text-decoration-none text-white m-1 d-block"
+                    style="width: 175px; height: 30px; line-height: 30px"
+                    >確認付款
+                  </a>
+                </div>
               </div>
-            </div>
             </button>
           </div>
         </div>
@@ -164,12 +164,22 @@
       </h3>
       <div id="swiper">
         <swiper
-          :slidesPerView="slidesPerView"
-          :grabCursor="true"
-          :spaceBetween="30"
+          :slidesPerView="1"
+          :spaceBetween="10"
           :pagination="{
             clickable: true,
           }"
+          :breakpoints="{
+            '640': {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            '1024': {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }"
+          :grabCursor="true"
           :freeMode="true"
           :modules="modules"
           class="mySwiper"
@@ -179,7 +189,8 @@
           <swiper-slide v-for="product in products" :key="product.id">
             <div class="row">
               <div
-                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-3 col-12 ms-3 p-0"
+                style="height: 450px"
+                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-3 ms-3 p-0"
                 @click="openModal(product)"
               >
                 <span
@@ -241,7 +252,7 @@
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRoute, useRouter } from 'vue-router'
@@ -252,10 +263,8 @@ import 'swiper/css'
 
 import 'swiper/css/pagination'
 
-import 'swiper/css/navigation'
-
 // import required modules
-import { Pagination, Navigation } from 'swiper/modules'
+import { Pagination, Mousewheel, Keyboard } from 'swiper/modules'
 export default {
   setup () {
     const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
@@ -358,27 +367,13 @@ export default {
       window.scrollTo(0, 0)
     }
     getOrder()
-
-    const slidesPerView = ref(4)
-    const setSlidesPerView = () => {
-      if (window.innerWidth <= 767) {
-        slidesPerView.value = 1
-      } else {
-        slidesPerView.value = 4
-      }
-    }
     onMounted(() => {
       getData()
       getCart()
-      setSlidesPerView()
-      window.addEventListener('resize', setSlidesPerView)
-    })
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', setSlidesPerView)
     })
 
     return {
-      modules: [Pagination, Navigation],
+      modules: [Pagination, Mousewheel, Keyboard],
       products,
       carts,
       openModal,
@@ -390,8 +385,7 @@ export default {
       isLoading,
       order,
       orderId,
-      payOrder,
-      slidesPerView
+      payOrder
     }
   },
   components: {
@@ -419,10 +413,20 @@ export default {
 #swiper {
   height: 550px;
 }
+
 html,
 body {
   position: relative;
   height: 100%;
+}
+
+body {
+  background: #fff8f1;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
 }
 
 .swiper {
@@ -430,15 +434,10 @@ body {
   height: 100%;
 }
 
-.swiper-wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: vanilla;
+  background: #fff8f1;
 
   /* Center slide text vertically */
   display: flex;
@@ -461,12 +460,14 @@ body {
 .swiper-pagination-bullet-active {
   background: #a2672d;
 }
+
 .swiper-button-next,
 .swiper-button-prev {
   color: #a2672d;
 }
+
 .card:hover {
   cursor: pointer;
-  transform: scale(1.02);
+  scale: 1.02;
 }
 </style>

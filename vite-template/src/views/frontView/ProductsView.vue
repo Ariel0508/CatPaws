@@ -185,7 +185,6 @@ const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
 
 export default {
   setup () {
-    // const store = useCartStore()
     const store = useCartStore()
     const { getCart } = store
     const toastMessageStore = useToastMessageStore()

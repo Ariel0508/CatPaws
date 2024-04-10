@@ -49,12 +49,22 @@
     </h3>
     <div id="swiper">
       <swiper
-        :slidesPerView="slidesPerView"
-        :grabCursor="true"
-        :spaceBetween="30"
+        :slidesPerView="1"
+        :spaceBetween="10"
         :pagination="{
           clickable: true,
         }"
+        :breakpoints="{
+          '640': {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          '1024': {
+            slidesPerView: 4,
+            spaceBetween: 30,
+          },
+        }"
+        :grabCursor="true"
         :freeMode="true"
         :modules="modules"
         class="mySwiper"
@@ -64,7 +74,7 @@
         <swiper-slide v-for="product in products" :key="product.id">
           <div class="row">
             <div
-              class="card shadow-sm rounded-lg border-0 position-relative col-12 ms-3 p-0 mb-3"
+              class="card shadow-sm rounded-lg border-0 position-relative p-0 mb-5"
               @click="openModal(product)"
             >
               <span
@@ -302,7 +312,7 @@
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useCartStore } from '../../stores/cartStore'
 import { useRouter, useRoute } from 'vue-router'
@@ -410,23 +420,10 @@ export default {
           secondLastProduct.value = null
         })
     }
-    const slidesPerView = ref(4)
-    const setSlidesPerView = () => {
-      if (window.innerWidth <= 767) {
-        slidesPerView.value = 1
-      } else {
-        slidesPerView.value = 4
-      }
-    }
     onMounted(() => {
       getData()
       fetchLastProduct()
       fetchsecondLastProduct()
-      setSlidesPerView()
-      window.addEventListener('resize', setSlidesPerView)
-    })
-    onBeforeUnmount(() => {
-      window.removeEventListener('resize', setSlidesPerView)
     })
     return {
       modules: [Navigation, Pagination, Mousewheel, Keyboard],
@@ -439,8 +436,7 @@ export default {
       status,
       isLoading,
       lastProduct,
-      secondLastProduct,
-      slidesPerView
+      secondLastProduct
     }
   },
   components: {
@@ -472,12 +468,22 @@ export default {
   }
 }
 #swiper {
-  height: 550px;
+  height: 100%;
 }
+
 html,
 body {
   position: relative;
   height: 100%;
+}
+
+body {
+  background: #fff8f1;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #000;
+  margin: 0;
+  padding: 0;
 }
 
 .swiper {
@@ -485,15 +491,10 @@ body {
   height: 100%;
 }
 
-.swiper-wrapper {
-  display: flex;
-  justify-content: space-around;
-}
-
 .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: vanilla;
+  background: #fff8f1;
 
   /* Center slide text vertically */
   display: flex;
@@ -516,13 +517,15 @@ body {
 .swiper-pagination-bullet-active {
   background: #a2672d;
 }
+
 .swiper-button-next,
 .swiper-button-prev {
   color: #a2672d;
 }
+
 .card:hover {
   cursor: pointer;
-  transform: scale(1.02);
+  scale: 1.02;
 }
 .newsimg {
   width: 500px;

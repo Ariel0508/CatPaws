@@ -24,14 +24,12 @@ export const useCartStore = defineStore('cart', () => {
       carts.value = res.data.data.carts
       finalTotal.value = res.data.data.final_total
       total.value = res.data.data.total
-      // console.log(carts.value)
     })
   }
   const getCartList = () => {
     const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart`
     axios.get(url).then((res) => {
       carts.value = res.data.data
-      console.log(carts.value)
     })
   }
   const addToCart = (id) => {
@@ -67,6 +65,7 @@ export const useCartStore = defineStore('cart', () => {
   }
   onMounted(() => {
     getCart()
+    getCartList()
   })
   return {
     carts,

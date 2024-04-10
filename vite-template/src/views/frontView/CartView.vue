@@ -44,11 +44,13 @@
               <td>
                 <div>
                   <img
-                      :src="cart.product.imageUrl"
-                      class="img-fluid object-fit-cover"
-                      style="width: 80px; height: 80px"
-                      alt=""
-                    />
+                    :src="cart.product.imageUrl"
+                    class="img-fluid object-fit-cover"
+                    style="width: 80px; height: 80px"
+                    alt=""
+                  />
+                </div>
+                <div>
                   <RouterLink
                     class="text-decoration-none text-black"
                     :to="`/product/${cart.product.id}`"
@@ -124,40 +126,8 @@
           <tfoot>
             <tr class="border-white">
               <td></td>
-              <td colspan="2" class="pt-4 p-0">
-                <form
-                  @submit.prevent="addCouponCode"
-                  class="d-flex align-items-center justify-content-end"
-                >
-                  <i class="bi bi-ticket-perforated fs-2 text-brown pe-3"></i>
-                  <select
-                    name="addCoupon"
-                    id="addCoupon"
-                    class="form-select rounded w-50 p-2 fs-6"
-                    v-model="coupon_code"
-                  >
-                    <option value="" disabled>請輸入優惠券</option>
-                    <option value="newMember20%">新會員首購八折優惠</option>
-                    <option value="purchasesover200010%">
-                      滿兩千享九折優惠
-                    </option>
-                  </select>
-                  <button
-                    type="submit"
-                    class="btn btn-outline-brown border-lightBrown ms-3 p-2"
-                  >
-                    <span>
-                      <img
-                        src="@/assets/loadingCoupon.gif"
-                        alt="loading"
-                        width="20"
-                        v-if="isLoadingCoupon"
-                      />
-                    </span>
-                    套用
-                  </button>
-                </form>
-              </td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>
                 <div class="text-black mt-3 pe-7 text-end fs-5">
@@ -212,10 +182,11 @@
                 <RouterLink
                   class="text-decoration-none text-black"
                   :to="`/product/${cart.product.id}`"
+                  style="font-size: 14px;"
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div>${{ $filters.numberToCurrencyNo(cart.total) }}</div>
+                <div class="mt-2">${{ $filters.numberToCurrencyNo(cart.total) }}</div>
               </div>
               <div class="col-5">
                 <div class="input-group w-100 pt-4">
@@ -266,36 +237,6 @@
             </div>
           </div>
           <div class="border-top border-lightBrown p-3 bg-white">
-            <form
-              @submit.prevent="addCouponCode"
-              class="d-flex align-items-center justify-content-between"
-            >
-              <i class="bi bi-ticket-perforated fs-1 text-brown pe-1"></i>
-              <select
-                name="addCoupon"
-                id="addCoupon"
-                class="form-select rounded p-2 fs-6"
-                v-model="coupon_code"
-              >
-                <option value="" disabled>請輸入優惠券</option>
-                <option value="newMember20%">新會員首購八折優惠</option>
-                <option value="purchasesover200010%">滿兩千享九折優惠</option>
-              </select>
-              <button
-                type="submit"
-                class="btn btn-outline-brown border-lightBrown p-2"
-              >
-                <span>
-                  <img
-                    src="@/assets/loadingCoupon.gif"
-                    alt="loading"
-                    width="20"
-                    v-if="isLoadingCoupon"
-                  />
-                </span>
-                套用
-              </button>
-            </form>
             <div class="text-black text-end mt-3 fs-5">
               總計：${{ $filters.numberToCurrencyNo(carts.total) }}元
             </div>
@@ -362,83 +303,12 @@ export default {
     const { getCart } = store
     const products = ref([])
     const id = ref(route.params.productId)
-    const carts = ref({})
+    const carts = ref(store.carts)
     const status = ref({
       loadingItem: ''
     })
     const isLoading = ref(false)
-    const getProducts = () => {
-      const { category = '' } = route.query
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/products?category=${category}`
-      isLoading.value = true
-      axios.get(url).then((res) => {
-        products.value = res.data.products
-        isLoading.value = false
-        // console.log(res.data.products)
-      })
-    }
-    // eslint-disable-next-line camelcase
-    const coupon_code = ref(localStorage.getItem('coupon_code') || '')
-    const isLoadingCoupon = ref(false)
-    const addCouponCode = () => {
-      if (
-        // eslint-disable-next-line camelcase
-        coupon_code.value === 'purchasesover200010%' &&
-        carts.value.total < 2000
-      ) {
-        pushMessage({
-          style: 'danger',
-          title: '無法使用優惠券',
-          content: '購物車金額需達到2000元才能使用優惠券'
-        })
-        return
-      }
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/coupon`
-      const coupon = {
-        // eslint-disable-next-line camelcase
-        code: coupon_code.value
-      }
-      // eslint-disable-next-line camelcase
-      if (coupon_code.value === '') {
-        return
-      }
-      // eslint-disable-next-line camelcase
-      isLoadingCoupon.value = true
-      axios
-        .post(url, { data: coupon })
-        .then((response) => {
-          pushMessage({
-            style: 'success',
-            title: '加入優惠券',
-            content: response.data.message
-          })
-          getCart()
-          isLoadingCoupon.value = false
-        })
-        .catch((error) => {
-          isLoadingCoupon.value = false
-          pushMessage({
-            style: 'danger',
-            title: '優惠券不可用',
-            content: error.response.data.message
-          })
-        })
-      // eslint-disable-next-line camelcase
-      localStorage.setItem('coupon_code', coupon_code.value)
-    }
     const goToOrder = () => {
-      if (
-        // eslint-disable-next-line camelcase
-        coupon_code.value === 'purchasesover200010%' &&
-        carts.value.total < 2000
-      ) {
-        pushMessage({
-          style: 'danger',
-          title: '無法使用優惠券',
-          content: '購物車金額需達到2000元才能使用優惠券'
-        })
-        return
-      }
       router.push('/order')
       window.scrollTo(0, 0)
       // localStorage.removeItem('coupon_code')
@@ -447,7 +317,6 @@ export default {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart`
       axios.get(url).then((res) => {
         carts.value = res.data.data
-        // console.log(carts.value);
       })
     }
     const changeCartQty = (item, qty = 1) => {
@@ -459,7 +328,6 @@ export default {
       const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart/${item.id}`
       axios.put(url, { data: order }).then(() => {
         status.value.loadingItem = ''
-        // alert(res.data.message);
         getCartList()
       })
     }
@@ -478,31 +346,6 @@ export default {
         getCartList()
       })
     }
-    const updateCart = (data) => {
-      const url = `${VITE_APP_URL}/api/${VITE_APP_PATH}/cart/${data.id}`
-      const cart = {
-        product_id: data.product_id,
-        qty: data.qty
-      }
-
-      axios
-        .put(url, { data: cart })
-        .then((response) => {
-          pushMessage({
-            style: 'success',
-            title: '更新購物車',
-            content: response.data.message
-          })
-          getCart()
-        })
-        .catch((error) => {
-          pushMessage({
-            style: 'danger',
-            title: '更新購物車',
-            content: error.response.data.message
-          })
-        })
-    }
     watch(
       () => carts.value,
       () => {
@@ -512,7 +355,6 @@ export default {
     onMounted(() => {
       getCart()
       getCartList()
-      getProducts()
     })
     return {
       products,
@@ -520,16 +362,10 @@ export default {
       carts,
       status,
       isLoading,
-      isLoadingCoupon,
       changeCartQty,
-      addCouponCode,
-      // eslint-disable-next-line camelcase
-      coupon_code,
       goToOrder,
       removeCartItem,
-      getProducts,
-      getCartList,
-      updateCart
+      getCartList
     }
   },
   components: {

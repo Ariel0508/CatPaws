@@ -186,7 +186,7 @@
         <swiper-slide v-for="product in products" :key="product.id">
           <div
           style="height:450px;"
-            class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5 p-0"
+            class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5"
             @click="openModal(product)"
           >
             <span
@@ -258,9 +258,7 @@ import 'swiper/css'
 
 import 'swiper/css/pagination'
 
-import 'swiper/css/navigation'
-
-import { Pagination, Navigation, Mousewheel, Keyboard } from 'swiper/modules'
+import { Pagination, Mousewheel, Keyboard } from 'swiper/modules'
 export default {
   setup () {
     const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env
@@ -355,7 +353,7 @@ export default {
     })
 
     return {
-      modules: [Pagination, Navigation, Mousewheel, Keyboard],
+      modules: [Pagination, Mousewheel, Keyboard],
       products,
       openModal,
       addToCart,
