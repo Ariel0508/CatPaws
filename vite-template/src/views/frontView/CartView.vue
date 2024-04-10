@@ -170,7 +170,7 @@
             :key="cart.id"
           >
             <div class="row">
-              <div class="col-3">
+              <div class="col-4 p-0">
                 <img
                   :src="cart.product.imageUrl"
                   class="img-fluid object-fit-cover"
@@ -178,60 +178,60 @@
                   alt=""
                 />
               </div>
-              <div class="col-4">
-                <RouterLink
+              <div class="col-8 p-0">
+                  <RouterLink
                   class="text-decoration-none text-black"
                   :to="`/product/${cart.product.id}`"
                   style="font-size: 14px;"
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div class="mt-2">${{ $filters.numberToCurrencyNo(cart.total) }}</div>
-              </div>
-              <div class="col-5">
-                <div class="input-group w-100 pt-4">
-                  <button
-                    v-if="cart.qty > 1"
-                    type="button"
-                    class="btn btn-outline-lightBrown"
-                    :disabled="cart.qty === 1"
-                    @click="
-                      cart.qty--;
-                      changeCartQty(cart, cart.qty);
-                    "
-                  >
-                    <span style="height: 16px; width: 16px">-</span>
-                  </button>
-                  <button
-                    v-else
-                    type="button"
-                    class="btn btn-outline-brown border-lightBrown"
-                    @click="removeCartItem(cart.id)"
-                  >
-                    <span style="height: 16px; width: 16px"
-                      ><i class="bi bi-trash"></i
-                    ></span>
-                  </button>
-                  <input
-                    v-model="cart.qty"
-                    type="number"
-                    min="1"
-                    max="20"
-                    class="form-control text-center"
-                    aria-label="Dollar amount (with dot and two decimal places)"
-                    readonly
-                    :disabled="cart.productId === status.loadingItem"
-                  />
-                  <button
-                    type="button"
-                    class="btn btn-outline-lightBrown"
-                    @click="
-                      cart.qty++;
-                      changeCartQty(cart, cart.qty);
-                    "
-                  >
-                    <span style="height: 16px; width: 16px">+</span>
-                  </button>
+                <div class="mt-4 d-flex align-items-center  justify-content-between">
+                  <div>${{ $filters.numberToCurrencyNo(cart.total) }}</div>
+                  <div class="input-group w-100 ps-3">
+                    <button
+                      v-if="cart.qty > 1"
+                      type="button"
+                      class="btn btn-outline-lightBrown"
+                      :disabled="cart.qty === 1"
+                      @click="
+                        cart.qty--;
+                        changeCartQty(cart, cart.qty);
+                      "
+                    >
+                      <span style="height: 16px; width: 16px">-</span>
+                    </button>
+                    <button
+                      v-else
+                      type="button"
+                      class="btn btn-outline-brown border-lightBrown"
+                      @click="removeCartItem(cart.id)"
+                    >
+                      <span style="height: 16px; width: 16px"
+                        ><i class="bi bi-trash"></i
+                      ></span>
+                    </button>
+                    <input
+                      v-model="cart.qty"
+                      type="number"
+                      min="1"
+                      max="20"
+                      class="form-control text-center"
+                      aria-label="Dollar amount (with dot and two decimal places)"
+                      readonly
+                      :disabled="cart.productId === status.loadingItem"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-lightBrown"
+                      @click="
+                        cart.qty++;
+                        changeCartQty(cart, cart.qty);
+                      "
+                    >
+                      <span style="height: 16px; width: 16px">+</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

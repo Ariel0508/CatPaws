@@ -123,7 +123,7 @@
             :key="cart.id"
           >
             <div class="row">
-              <div class="col-4">
+              <div class="col-4 p-0">
                 <img
                   :src="cart.product.imageUrl"
                   class="img-fluid object-fit-cover"
@@ -131,19 +131,20 @@
                   alt=""
                 />
               </div>
-              <div class="col-5">
+              <div class="col-8 p-0">
                 <RouterLink
                   class="text-decoration-none text-black"
                   :to="`/product/${cart.product.id}`"
+                  style="font-size: 14px;"
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div class="mt-2">
+                <div class="mt-3 d-flex justify-content-between">
                   ${{ $filters.numberToCurrencyNo(cart.product.price) }}
+                  <div class="pe-4">
+                    x {{ cart.qty }}
+                  </div>
                 </div>
-              </div>
-              <div class="col-3 text-center">
-                <div>x {{ cart.qty }}</div>
               </div>
             </div>
           </div>
@@ -153,7 +154,7 @@
               <select
                 name="addCoupon"
                 id="addCoupon"
-                class="form-select rounded w-50 p-2 fs-6"
+                class="form-select rounded w-100 p-2 fs-6"
                 v-model="coupon_code"
                 @change="addCouponCode"
               >
