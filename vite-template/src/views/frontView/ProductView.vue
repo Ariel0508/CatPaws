@@ -46,7 +46,7 @@
             ></ImageComponent>
           </div>
           <div class="col-md-6 d-flex flex-column justify-content-between">
-              <div class="fs-3 mb-5">{{ product.title }}</div>
+              <div class="fs-4 mb-4">{{ product.title }}</div>
               <div class="mb-4">
                 <div
                   v-if="product.price === product.origin_price"
@@ -349,7 +349,6 @@ export default {
     watch(
       () => route.query,
       () => {
-        getProducts()
         getCart()
       }
     )
