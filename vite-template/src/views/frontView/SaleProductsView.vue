@@ -31,19 +31,21 @@
           <li class="breadcrumb-item active" aria-current="page">特價商品</li>
         </ol>
       </nav>
-      <div class="mSale d-flex justify-content-end mt-5">
-        <select
-          class="mSale p-1 text-gray2"
-          aria-label="Default select example"
-          @change="selectChange"
-        >
-          <option selected>價格</option>
-          <option value="high">價格高到低</option>
-          <option value="low">價格低到高</option>
-        </select>
-      </div>
-      <div class="row mt-5">
+      <div class="row mt-7">
         <div class="col-md-3">
+          <div class="mSale">
+            <div class="d-flex justify-content-end mb-5">
+              <select
+                class="p-1 text-gray2"
+                aria-label="Default select example"
+                @change="selectChange"
+              >
+                <option selected>價格</option>
+                <option value="high">價格高到低</option>
+                <option value="low">價格低到高</option>
+              </select>
+            </div>
+          </div>
           <div class="pSale">
             <div class="fs-4 text-gray2 mb-2">篩選條件</div>
             <div
@@ -69,7 +71,7 @@
               :key="product.id"
             >
               <div
-                class="card shadow-sm bg-light rounded-lg border-0 position-relative mb-5"
+                class="card shadow-sm rounded-lg border-0 position-relative mb-5"
                 @click="openModal(product)"
               >
                 <span
@@ -84,7 +86,7 @@
                   alt="productPicture"
                 />
                 <div class="card-body">
-                  <p class="card-title text-center pt-2">
+                  <p class="card-title text-center pt-2 rwdFont">
                     {{ product.title }}
                   </p>
                   <div
@@ -184,7 +186,6 @@ export default {
           )
           products.value = filteredProducts
           isLoading.value = false
-          // console.log(filteredProducts)
         })
         .catch((err) => {
           // eslint-disable-next-line no-alert
@@ -256,7 +257,13 @@ export default {
 .price-active {
   color: #a2672d;
 }
+.rwdFont {
+  font-size: 20px;
+}
 @media screen and (max-width: 768px) {
+  .mSale {
+    display: block;
+  }
   .mSale select {
     display: block;
     width: 170px;
@@ -276,5 +283,8 @@ export default {
   .card {
     height: 450px;
   }
+  .rwdFont {
+  font-size: 16px;
+}
 }
 </style>

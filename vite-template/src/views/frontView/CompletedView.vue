@@ -83,7 +83,7 @@
             :key="item.id"
           >
             <div class="row">
-              <div class="col-4">
+              <div class="col-4 p-0">
                 <img
                   :src="item.product.imageUrl"
                   class="img-fluid object-fit-cover"
@@ -91,11 +91,13 @@
                   alt=""
                 />
               </div>
-              <div class="col-5">
+              <div class="col-8 p-0">
                 <div>{{ item.product.title }}</div>
-                <div>${{ $filters.numberToCurrencyNo(item.total) }}</div>
+                <div class="mt-3 d-flex justify-content-between">
+                  <div>${{ $filters.numberToCurrencyNo(item.total) }}</div>
+                  <div class="col-3 text-center">x {{ item.qty }}</div>
+                </div>
               </div>
-              <div class="col-3 text-center">x {{ item.qty }}</div>
             </div>
           </div>
           <div class="border-top border-lightBrown p-4 bg-white">
@@ -108,28 +110,27 @@
         </div>
       </div>
       <form @submit.prevent="payOrder">
-        <div class="row px-2 py-5 fs-5">
-          <div class="mb-5">下單時間：{{ $filters.date(order.create_at) }}</div>
-
+        <div class="row px-2 py-5 fs-6">
+          <div class="mb-5"> 付款狀態
+            <span class="text-danger fw-bold" v-if="!order.is_paid">尚未付款</span>
+            <span v-else class="text-success fw-bold">付款完成</span></div>
           <div class="col-md-6 col-12">
             <div class="mb-3">送貨地址：{{ order.user.address }}</div>
             <div class="mb-3">Email：{{ order.user.email }}</div>
             <div class="mb-3">顧客姓名：{{ order.user.name }}</div>
-            <div class="mb-3">電話：{{ order.user.tel }}</div>
+            <div class="mb-4">電話：{{ order.user.tel }}</div>
+             <div class="mb-3 text-gray2">
+              下單時間：{{ $filters.date(order.create_at) }}
+          </div>
           </div>
           <div class="col-md-6 col-12">
             <div class="mb-3">留言</div>
             <div
-              class="border border-1 rounded p-2 mb-3 w-100 bg-white"
-              style="height: 100px"
+              class="border border-1 rounded p-2 w-100 bg-white"
+              style="height: 150px;"
             >
               {{ order.message }}
             </div>
-          </div>
-          <div class="text-end">
-            付款狀態
-            <span class="text-danger" v-if="!order.is_paid">尚未付款</span>
-            <span v-else class="text-success">付款完成</span>
           </div>
         </div>
         <div class="text-end" v-if="order.is_paid === false">
@@ -157,7 +158,7 @@
         </div>
       </form>
     </div>
-    <div class="container mt-8 p-0">
+    <div class="container mt-8 p-0" v-if="order.is_paid === true">
       <h3 class="text-center text-brown">
         猜你喜歡
         <div class="text-center text-brown m-0 p-0 fs-1">-</div>
@@ -187,14 +188,13 @@
           :keyboard="true"
         >
           <swiper-slide v-for="product in products" :key="product.id">
-            <div class="row">
               <div
                 style="height: 450px"
-                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-3 ms-3 p-0"
+                class="card shadow-sm rounded-lg border-0 position-relative mb-5"
                 @click="openModal(product)"
               >
                 <span
-                  class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
+                  class="position-absolute top-0 start-0 fw-bold fs-6 text-white p-2 bg-brown"
                   v-if="product.price !== product.origin_price"
                   >SALE</span
                 >
@@ -240,7 +240,6 @@
                   </button>
                 </div>
               </div>
-            </div>
           </swiper-slide>
         </swiper>
       </div>
@@ -330,7 +329,6 @@ export default {
         .then((response) => {
           order.value = response.data.order
           isLoading.value = false
-          // console.log(order.value)
         })
         .catch((error) => {
           pushMessage({
@@ -468,6 +466,6 @@ body {
 
 .card:hover {
   cursor: pointer;
-  scale: 1.02;
+  background: #f4f0e3;
 }
 </style>

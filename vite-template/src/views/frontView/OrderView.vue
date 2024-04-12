@@ -140,7 +140,7 @@
                   {{ cart.product.title }}</RouterLink
                 >
                 <div class="mt-3 d-flex justify-content-between">
-                  ${{ $filters.numberToCurrencyNo(cart.product.price) }}
+                  <div>${{ $filters.numberToCurrencyNo(cart.product.price) }}</div>
                   <div class="pe-4">
                     x {{ cart.qty }}
                   </div>

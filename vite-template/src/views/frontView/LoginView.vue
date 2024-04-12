@@ -44,14 +44,19 @@
       </form>
     </div>
   </div>
+  <ToastMessages />
 </template>
 
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
+import { useToastMessageStore } from '../../stores/toastMessage'
+import ToastMessages from '../../components/ToastMessages.vue'
 
 const { VITE_APP_URL } = import.meta.env
+const toastMessageStore = useToastMessageStore()
+const { pushMessage } = toastMessageStore
 
 export default {
   setup () {
@@ -65,25 +70,31 @@ export default {
       axios
         .post(`${VITE_APP_URL}/admin/signin`, user.value)
         .then((res) => {
-          // console.log(res);
           const { token, expired } = res.data
-          // console.log(token, expired);
           document.cookie = `rubbyToken=${token}; expires=${new Date(
             expired
           )};`
+          pushMessage({
+            style: 'success',
+            title: '登入成功'
+          })
           router.push('/admin/products')
           window.scrollTo(0, 0)
-          console.log(token, expired)
         })
-        .catch((err) => {
-          // eslint-disable-next-line no-alert
-          alert(err.response.data.message)
+        .catch(() => {
+          pushMessage({
+            style: 'danger',
+            title: '登入失敗'
+          })
         })
     }
     return {
       user,
       login
     }
+  },
+  components: {
+    ToastMessages
   }
 }
 </script>

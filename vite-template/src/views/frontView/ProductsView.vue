@@ -34,7 +34,7 @@
           </li>
         </ol>
       </nav>
-      <div class="row mt-5">
+      <div class="row mt-7">
         <div class="col-md-3">
           <div class="mSale">
             <div class="d-flex justify-content-end mb-3">
@@ -105,7 +105,7 @@
         <div class="col-md-9">
           <div class="row">
             <div
-              class="col-md-4 col-6 mb-5"
+              class="col-md-4 col-6"
               v-for="product in products"
               :key="product.id"
             >
@@ -125,7 +125,7 @@
                   alt="productPicture"
                 />
                 <div class="card-body">
-                  <p class="card-title text-center">{{ product.title }}</p>
+                  <p class="card-title text-center rwdFont">{{ product.title }}</p>
                   <div
                     v-if="product.price === product.origin_price"
                     class="text-gray2 fs-5 card-title text-center"
@@ -209,7 +209,6 @@ export default {
         .then((res) => {
           products.value = res.data.products
           pagination.value = res.data.pagination
-          // console.log(res.data.products);
         })
         .catch((err) => {
           // eslint-disable-next-line no-alert
@@ -360,6 +359,9 @@ export default {
 .mSale {
   display: none;
 }
+.rwdFont {
+  font-size: 20px;
+}
 @media screen and (max-width: 768px) {
   .mSale {
     display: block;
@@ -380,5 +382,8 @@ export default {
   .card {
     height: 450px;
   }
+  .rwdFont {
+  font-size: 16px;
+}
 }
 </style>

@@ -261,22 +261,24 @@
           </div>
         </div>
       </div>
-      <div v-else class="text-center mb-8">
-        <img
-          src="../../../public/images/empty-cart.png"
-          class="img-fluid object-fit-cover"
-          alt="emptycartpicture"
-          style="width: 300px; height: 350px"
-        />
-        <div class="text-brown fs-5">
-          購物車還沒有商品呦~
-          <br />
-          <RouterLink
-            to="/products"
-            class="btn btn-brown text-decoration-none m-3"
-            onclick="window.scrollTo(0, 0)"
-            >按我去選購</RouterLink
-          >
+      <div v-else class="text-center mb-8 ">
+        <div class="d-flex flex-column justify-content-center align-items-center">
+          <img
+            src="../../../public/images/empty-cart.png"
+            class="img-fluid object-fit-cover"
+            alt="emptycartpicture"
+            width="300"
+          />
+          <div class="text-brown fs-5">
+            購物車還沒有商品呦~
+            <br />
+            <RouterLink
+              to="/products"
+              class="btn btn-brown text-decoration-none m-3"
+              onclick="window.scrollTo(0, 0)"
+              >按我去選購</RouterLink
+            >
+          </div>
         </div>
       </div>
     </div>

@@ -19,128 +19,52 @@
         "
       />
     </VueLoading>
-    <div class="row p-0 bg-black">
+    <div class="row p-0 bg-black mt-6">
       <div class="col-md-5 col-12 p-0">
         <img
           src="../../../public/images/1.png"
           class="img-fluid w-100 object-fit-cover"
-          style="height: 500px"
+          style="height: 550px"
           alt="banner"
         />
       </div>
-      <div class="col-md-7 col-12 text-center align-self-center mt-5 p-0">
-        <p class="text-light" style="font-size: 1.5em">
-          讓您的貓咪成為時尚界的新寵兒!
-        </p>
-        <button
-          type="button"
-          class="btn btn-outline-light m-3 px-5 btn-lg rounded-0"
-          @click="goToShop"
-        >
-          立即選購
-        </button>
+      <div class="col-md-7 col-12 text-center p-0 d-flex flex-column align-items-center justify-content-center">
+        <div class="m-4">
+          <p class="text-light mt-3" style="font-size: 1.5em">
+            讓您的貓咪成為時尚界的新寵兒!
+          </p>
+          <button
+            type="button"
+            class="btn btn-outline-light m-3 px-5 btn-lg rounded-0"
+            @click="goToShop"
+          >
+            立即選購
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
   <div class="container mt-8">
-    <h3 class="text-center text-brown">
-      精選商品
-      <div class="text-center text-brown m-0 p-0 fs-1">-</div>
-    </h3>
-    <div id="swiper">
-      <swiper
-        :slidesPerView="1"
-        :spaceBetween="10"
-        :pagination="{
-          clickable: true,
-        }"
-        :breakpoints="{
-          '640': {
-            slidesPerView: 2,
-            spaceBetween: 20,
-          },
-          '1024': {
-            slidesPerView: 4,
-            spaceBetween: 30,
-          },
-        }"
-        :grabCursor="true"
-        :freeMode="true"
-        :modules="modules"
-        class="mySwiper"
-        :mousewheel="true"
-        :keyboard="true"
-      >
-        <swiper-slide v-for="product in products" :key="product.id">
-          <div class="row">
-            <div
-              class="card shadow-sm rounded-lg border-0 position-relative p-0 mb-5"
-              @click="openModal(product)"
-            >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown rounded-top"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
-              >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
-              <div
-                class="card-body d-flex flex-column justify-content-between p-3"
-              >
-                <div class="card-title">{{ product.title }}</div>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 mt-2"
-                >
-                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-                </div>
-                <div
-                  v-else
-                  class="d-flex align-items-center justify-content-center ms-2 mt-2"
-                >
-                  <del class="text-gray2 fs-5"
-                    >${{
-                      $filters.numberToCurrencyNo(product.origin_price)
-                    }}</del
-                  >
-                  <div class="text-brown fs-5 ms-3">
-                    ${{ $filters.numberToCurrencyNo(product.price) }}
-                  </div>
-                </div>
-                <div class="mt-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-brown m-2 px-5 rounded-pill"
-                    @click.stop="addToCart(product.id, 1)"
-                  >
-                    <span
-                      v-if="product.id === status.loadingItem"
-                      class="spinner-border spinner-border-sm"
-                      aria-hidden="true"
-                    ></span>
-                    加入購物車
-                    <i class="bi bi-cart-plus fs-5"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </swiper-slide>
-      </swiper>
-    </div>
-  </div>
-  <div class="container-fluid mt-8">
-    <swiper :navigation="true" :modules="modules" class="mySwiper">
+    <swiper
+    :spaceBetween="30"
+    :centeredSlides="true"
+    :autoplay="{
+      delay: 2500,
+      disableOnInteraction: false,
+    }"
+    :pagination="{
+      clickable: true,
+    }"
+    :navigation="true"
+    :modules="modules"
+    class="mySwiper">
       <swiper-slide>
-        <div class="row pc">
+        <div class="row pc mb-5 ">
           <div
             class="col-md-6 p-0 bg-white d-flex justify-content-start text-start"
             v-if="lastProduct"
-            style="width: 600px"
+            style="width: 550px"
           >
             <div class="ms-5">
               <p class="fs-1 mt-8">新品上市</p>
@@ -165,7 +89,7 @@
             <img
               :src="lastProduct?.imagesUrl[0]"
               class="img-fluid object-fit-cover w-100"
-              style="height: 600px"
+              style="height: 550px"
               alt="picture"
               @click="openModal(lastProduct)"
             />
@@ -177,7 +101,7 @@
           <div
             class="col-md-6 p-0 bg-white d-flex justify-content-start text-start"
             v-if="secondLastProduct"
-            style="width: 600px"
+            style="width: 550px"
           >
             <div class="ms-5">
               <p class="fs-1 mt-8">新品上市</p>
@@ -204,7 +128,7 @@
             <img
               :src="secondLastProduct?.imagesUrl[0]"
               class="img-fluid object-fit-cover w-100"
-              style="height: 600px"
+              style="height: 550px"
               alt="picture"
               @click="openModal(secondLastProduct)"
             />
@@ -217,7 +141,7 @@
         <img
           :src="lastProduct?.imagesUrl[0]"
           class="img-fluid object-fit-cover w-100"
-          style="height: 600px"
+          style="height: 500px"
           alt="picture"
           @click="openModal(lastProduct)"
         />
@@ -233,7 +157,7 @@
         <img
           :src="secondLastProduct?.imagesUrl[0]"
           class="img-fluid object-fit-cover w-100"
-          style="height: 600px"
+          style="height: 500px"
           alt="picture"
           @click="openModal(secondLastProduct)"
         />
@@ -246,6 +170,10 @@
     </div>
   </div>
   <div class="container mt-8">
+    <h3 class="text-center text-brown">
+      產品分類
+      <div class="text-center text-brown m-0 p-0 fs-1">-</div>
+    </h3>
     <div class="row">
       <div class="col-md-4 col-12 mb-3 position-relative category">
         <RouterLink
@@ -306,6 +234,97 @@
       </div>
     </div>
   </div>
+  <div class="container mt-8">
+    <h3 class="text-center text-brown">
+      精選商品
+      <div class="text-center text-brown m-0 p-0 fs-1">-</div>
+    </h3>
+    <div id="swiper">
+      <swiper
+        :slidesPerView="1"
+        :spaceBetween="10"
+        :pagination="{
+          clickable: true,
+        }"
+        :breakpoints="{
+          '640': {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          '1024': {
+            slidesPerView: 4,
+            spaceBetween: 30,
+          },
+        }"
+        :grabCursor="true"
+        :freeMode="true"
+        :modules="modules"
+        class="mySwiper"
+        :mousewheel="true"
+        :keyboard="true"
+      >
+        <swiper-slide v-for="product in products" :key="product.id">
+          <div class="row mb-5">
+            <div
+              class="card shadow-sm rounded-lg border-0 position-relative p-0"
+              @click="openModal(product)"
+            >
+              <span
+                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown fs-6 fw-bold"
+                v-if="product.price !== product.origin_price"
+                >SALE</span
+              >
+              <img
+                :src="product.imageUrl"
+                class="card-img-top object-fit-cover w-100"
+                style="height: 300px"
+                alt="productPicture"
+              />
+              <div
+                class="card-body d-flex flex-column justify-content-between p-3"
+              >
+                <div class="card-title">{{ product.title }}</div>
+                <div
+                  v-if="product.price === product.origin_price"
+                  class="text-gray2 fs-5 mt-2"
+                >
+                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                </div>
+                <div
+                  v-else
+                  class="d-flex align-items-center justify-content-center ms-2 mt-2"
+                >
+                  <del class="text-gray2 fs-5"
+                    >${{
+                      $filters.numberToCurrencyNo(product.origin_price)
+                    }}</del
+                  >
+                  <div class="text-brown fs-5 ms-3">
+                    ${{ $filters.numberToCurrencyNo(product.price) }}
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown m-2 px-5 rounded-pill"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
+                      v-if="product.id === status.loadingItem"
+                      class="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                    加入購物車
+                    <i class="bi bi-cart-plus fs-5"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
+  </div>
   <ToastMessages />
 </template>
 
@@ -325,7 +344,7 @@ import 'swiper/css/pagination'
 
 import 'swiper/css/navigation'
 
-import { Navigation, Pagination, Mousewheel, Keyboard } from 'swiper/modules'
+import { Navigation, Pagination, Autoplay, Mousewheel, Keyboard } from 'swiper/modules'
 
 export default {
   setup () {
@@ -389,7 +408,6 @@ export default {
       } else {
         showPagination.value = false
       }
-      console.log(category)
     }
     const lastProduct = ref(null)
     const fetchLastProduct = () => {
@@ -400,8 +418,7 @@ export default {
             lastProduct.value = res.data.products[res.data.products.length - 1]
           }
         })
-        .catch((err) => {
-          console.error(err.response.data.message)
+        .catch(() => {
           lastProduct.value = null
         })
     }
@@ -415,8 +432,7 @@ export default {
               res.data.products[res.data.products.length - 2]
           }
         })
-        .catch((err) => {
-          console.error(err.response.data.message)
+        .catch(() => {
           secondLastProduct.value = null
         })
     }
@@ -426,7 +442,7 @@ export default {
       fetchsecondLastProduct()
     })
     return {
-      modules: [Navigation, Pagination, Mousewheel, Keyboard],
+      modules: [Navigation, Pagination, Autoplay, Mousewheel, Keyboard],
       goToShop,
       products,
       openModal,
@@ -525,7 +541,7 @@ body {
 
 .card:hover {
   cursor: pointer;
-  scale: 1.02;
+  background: #f4f0e3;
 }
 .newsimg {
   width: 500px;

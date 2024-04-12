@@ -1,9 +1,9 @@
 <template>
   <div class="my-4">
-    <nav class="navbar navbar-expand-xxl bg-vanilla fixed-top">
-      <div class="container p-0 text-center">
+    <nav class="navbar navbar-expand-xxl bg-vanilla fixed-top p-0">
+      <div class="container text-center">
         <RouterLink class="navbar-brand logo text-brown" to="/" @click="hideMobileMenu">
-          <h1 class="fs-2">Cat Paws</h1>
+          <h1 class="fs-3 mt-2">Cat Paws</h1>
         </RouterLink>
         <div class="d-flex align-items-center">
           <RouterLink
@@ -34,7 +34,7 @@
           </button>
         </div>
         <div
-          class="collapse navbar-collapse justify-content-end"
+          class="collapse navbar-collapse justify-content-end pt-2"
           id="navbarNav"
         >
           <ul class="navbar-nav">

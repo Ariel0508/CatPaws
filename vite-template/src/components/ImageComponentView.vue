@@ -56,7 +56,7 @@ watch([elementX, elementY, isOutside], () => {
 
 <template>
   <!-- {{ elementX }}, {{ elementY }}, {{ isOutside }} -->
-  <div class="goods-image flex-column d-flex p-0">
+  <div class="goods-image flex-column d-flex align-items-between p-0">
     <div class="middle" ref="target">
       <img
         :src="imageList[activeIndex]"
@@ -137,9 +137,10 @@ watch([elementX, elementY, isOutside], () => {
     width: 100%;
 
     li {
+      background: #fff;
       width: 100px;
       height: 100px;
-      margin-block: 20px;
+      margin-block: 15px;
       cursor: pointer;
       &:hover,
       &.active {
@@ -173,8 +174,8 @@ watch([elementX, elementY, isOutside], () => {
     }
 
     .small li {
-      width: 70px;
-      height: 70px;
+      width: 60px;
+      height: 60px;
       margin-block: 15px;
     }
   }
