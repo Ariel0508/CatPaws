@@ -2,7 +2,7 @@
 @import "../node_modules/bootstrap/scss/variables";
 
 $custom-colors:(
-    "brown": rgb(162,103,45),
+    "brown": rgb(162, 103, 45),
     "lightBrown": rgb(232, 184, 135),
     "vanilla": rgb(244, 240, 227),
     "lightVanilla": rgb(255, 248, 241),
@@ -43,6 +43,7 @@ $pagination-active-border-color: map-get($theme-colors, 'gray1');
 $pagination-hover-color: map-get($theme-colors, 'brown');
 $pagination-focus-color:  map-get($theme-colors, 'brown');
 
+$progress-bar-bg: map-get($theme-colors, 'lightBrown');
 
 $position-values: (
   0: 0,

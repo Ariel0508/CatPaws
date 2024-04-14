@@ -120,8 +120,7 @@
                 >
                 <img
                   :src="product.imageUrl"
-                  class="card-img-top object-fit-cover w-100"
-                  style="height: 280px"
+                  class="card-img-top object-fit-cover w-100 rwdImg"
                   alt="productPicture"
                 />
                 <div class="card-body">
@@ -339,7 +338,7 @@ export default {
 
 <style scoped lang="scss">
 .card {
-  height: 420px;
+  height: 450px;
   &:hover {
     cursor: pointer;
     transform: scale(1.02);
@@ -362,6 +361,9 @@ export default {
 .rwdFont {
   font-size: 20px;
 }
+.rwdImg{
+  height: 280px;
+}
 @media screen and (max-width: 768px) {
   .mSale {
     display: block;
@@ -380,10 +382,13 @@ export default {
     display: none;
   }
   .card {
-    height: 450px;
+    height: 350px;
   }
   .rwdFont {
   font-size: 16px;
+}
+.rwdImg{
+  height: 200px;
 }
 }
 </style>

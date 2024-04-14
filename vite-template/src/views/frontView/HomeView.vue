@@ -264,9 +264,9 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div class="row mb-5">
+          <div>
             <div
-              class="card shadow-sm rounded-lg border-0 position-relative p-0"
+              class="card shadow-sm rounded-lg border-0 position-relative mb-5"
               @click="openModal(product)"
             >
               <span
@@ -464,25 +464,6 @@ export default {
 </script>
 
 <style>
-@media screen and (max-width: 767px) {
-  .pc {
-    display: none;
-  }
-  .mobile {
-    display: block;
-  }
-  .newProduct {
-    margin-top: 80px;
-  }
-  .mySwiper {
-    width: 100%;
-  }
-}
-@media screen and (min-width: 768px) {
-  .mobile {
-    display: none;
-  }
-}
 #swiper {
   height: 100%;
 }
@@ -557,5 +538,24 @@ body {
 .category:hover {
   opacity: 1;
   transition: ease-in-out 0.3s;
+}
+@media screen and (max-width: 767px) {
+  .pc {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+  .newProduct {
+    margin-top: 80px;
+  }
+  .mySwiper {
+    width: 100%;
+  }
+}
+@media screen and (min-width: 768px) {
+  .mobile {
+    display: none;
+  }
 }
 </style>

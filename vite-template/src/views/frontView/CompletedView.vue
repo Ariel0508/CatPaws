@@ -35,6 +35,64 @@
         </ol>
       </nav>
     </div>
+    <div class="container-fluid mt-6 rwdStep">
+      <div class="position-relative m-4">
+        <div class="progress" style="height: 2px">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            style="width: 100%"
+            aria-valuenow="50"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+        <button
+          type="button"
+          class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-brown rounded-pill"
+          style="width: 2rem; height: 2rem"
+        >
+          1
+        </button>
+        <button
+          type="button"
+          class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-brown rounded-pill"
+          style="width: 2rem; height: 2rem"
+        >
+          2
+        </button>
+        <button
+          type="button"
+          class="position-absolute top-0 start-100 translate-middle btn btn-sm rounded-pill"
+          style="width: 2rem; height: 2rem"
+          :class="order.is_paid ? 'btn-brown' : 'btn-gray2'"
+        >
+          3
+        </button>
+      </div>
+      <div class="pt-1">
+        <div class="position-relative m-4">
+          <div
+            class="position-absolute top-0 start-0 translate-middle"
+            style="width: 4rem; height: 2rem"
+          >
+            確認商品
+          </div>
+          <div
+            class="position-absolute top-0 start-50 translate-middle"
+            style="width: 4rem; height: 2rem"
+          >
+            填寫資料
+          </div>
+          <div
+            class="position-absolute top-0 start-100 translate-middle"
+            style="width: 4rem; height: 2rem"
+          >
+            完成訂單
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container mt-5">
       <div class="row">
         <table class="table pc align-middle border-bottom border-lightBrown">
@@ -111,23 +169,27 @@
       </div>
       <form @submit.prevent="payOrder">
         <div class="row px-2 py-5 fs-6">
-          <div class="mb-5"> 付款狀態
-            <span class="text-danger fw-bold" v-if="!order.is_paid">尚未付款</span>
-            <span v-else class="text-success fw-bold">付款完成</span></div>
+          <div class="mb-5">
+            付款狀態
+            <span class="text-danger fw-bold" v-if="!order.is_paid"
+              >尚未付款</span
+            >
+            <span v-else class="text-success fw-bold">付款完成</span>
+          </div>
           <div class="col-md-6 col-12">
             <div class="mb-3">送貨地址：{{ order.user.address }}</div>
             <div class="mb-3">Email：{{ order.user.email }}</div>
             <div class="mb-3">顧客姓名：{{ order.user.name }}</div>
             <div class="mb-4">電話：{{ order.user.tel }}</div>
-             <div class="mb-3 text-gray2">
+            <div class="mb-3 text-gray2">
               下單時間：{{ $filters.date(order.create_at) }}
-          </div>
+            </div>
           </div>
           <div class="col-md-6 col-12">
             <div class="mb-3">留言</div>
             <div
               class="border border-1 rounded p-2 w-100 bg-white"
-              style="height: 150px;"
+              style="height: 150px"
             >
               {{ order.message }}
             </div>
@@ -188,58 +250,58 @@
           :keyboard="true"
         >
           <swiper-slide v-for="product in products" :key="product.id">
-              <div
-                style="height: 450px"
-                class="card shadow-sm rounded-lg border-0 position-relative mb-5"
-                @click="openModal(product)"
+            <div
+              style="height: 450px"
+              class="card shadow-sm rounded-lg border-0 position-relative mb-5"
+              @click="openModal(product)"
+            >
+              <span
+                class="position-absolute top-0 start-0 fw-bold fs-6 text-white p-2 bg-brown"
+                v-if="product.price !== product.origin_price"
+                >SALE</span
               >
-                <span
-                  class="position-absolute top-0 start-0 fw-bold fs-6 text-white p-2 bg-brown"
-                  v-if="product.price !== product.origin_price"
-                  >SALE</span
+              <img
+                :src="product.imageUrl"
+                class="card-img-top object-fit-cover w-100"
+                style="height: 300px"
+                alt="productPicture"
+              />
+              <div class="card-body">
+                <p class="card-title">{{ product.title }}</p>
+                <div
+                  v-if="product.price === product.origin_price"
+                  class="text-gray2 fs-5 card-title text-center"
                 >
-                <img
-                  :src="product.imageUrl"
-                  class="card-img-top object-fit-cover w-100"
-                  style="height: 300px"
-                  alt="productPicture"
-                />
-                <div class="card-body">
-                  <p class="card-title">{{ product.title }}</p>
-                  <div
-                    v-if="product.price === product.origin_price"
-                    class="text-gray2 fs-5 card-title text-center"
-                  >
-                    ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-                  </div>
-                  <div
-                    v-else
-                    class="d-flex align-items-center justify-content-center card-title ms-2"
-                  >
-                    <del class="text-gray2 fs-5"
-                      >${{
-                        $filters.numberToCurrencyNo(product.origin_price)
-                      }}</del
-                    >
-                    <div class="text-brown fs-5 ms-3">
-                      ${{ $filters.numberToCurrencyNo(product.price) }}
-                    </div>
-                  </div>
-                  <br />
-                  <button
-                    type="button"
-                    class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                    @click.stop="addToCart(product.id, 1)"
-                  >
-                    <span
-                      v-if="product.id === status.loadingItem"
-                      class="spinner-border spinner-border-sm"
-                      aria-hidden="true"
-                    ></span
-                    ><i class="bi bi-cart-plus"></i>
-                  </button>
+                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
                 </div>
+                <div
+                  v-else
+                  class="d-flex align-items-center justify-content-center card-title ms-2"
+                >
+                  <del class="text-gray2 fs-5"
+                    >${{
+                      $filters.numberToCurrencyNo(product.origin_price)
+                    }}</del
+                  >
+                  <div class="text-brown fs-5 ms-3">
+                    ${{ $filters.numberToCurrencyNo(product.price) }}
+                  </div>
+                </div>
+                <br />
+                <button
+                  type="button"
+                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
+                  @click.stop="addToCart(product.id, 1)"
+                >
+                  <span
+                    v-if="product.id === status.loadingItem"
+                    class="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  ></span
+                  ><i class="bi bi-cart-plus"></i>
+                </button>
               </div>
+            </div>
           </swiper-slide>
         </swiper>
       </div>
@@ -395,19 +457,6 @@ export default {
 </script>
 
 <style>
-@media screen and (max-width: 767px) {
-  .pc {
-    display: none;
-  }
-  .mobile {
-    display: block;
-  }
-}
-@media screen and (min-width: 768px) {
-  .mobile {
-    display: none;
-  }
-}
 #swiper {
   height: 550px;
 }
@@ -467,5 +516,22 @@ body {
 .card:hover {
   cursor: pointer;
   background: #f4f0e3;
+}
+.rwdStep {
+  width: 50%;
+}
+.mobile {
+  display: none;
+}
+@media screen and (max-width: 767px) {
+  .pc {
+    display: none;
+  }
+  .mobile {
+    display: block;
+  }
+  .rwdStep {
+    width: 50%;
+  }
 }
 </style>

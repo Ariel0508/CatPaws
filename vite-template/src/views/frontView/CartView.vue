@@ -27,9 +27,86 @@
         </ol>
       </nav>
     </div>
-    <div class="container mt-5">
-      <div class="row" v-if="carts.total !== 0">
-        <table class="table align-middle border-lightBrown pc">
+    <div v-if="carts.carts?.length === 0" class="text-center mb-8">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <img
+          src="../../../public/images/empty-cart.png"
+          class="img-fluid object-fit-cover"
+          alt="emptycartpicture"
+          width="300"
+        />
+        <div class="text-brown fs-5">
+          購物車還沒有商品呦~
+          <br />
+          <RouterLink
+            to="/products"
+            class="btn btn-brown text-decoration-none m-3"
+            onclick="window.scrollTo(0, 0)"
+            >按我去選購</RouterLink
+          >
+        </div>
+      </div>
+    </div>
+    <div class="container mt-7" v-else>
+      <div class="container-fluid mt-6 rwdStep">
+        <div class="position-relative m-4">
+          <div class="progress" style="height: 2px">
+            <div
+              class="progress-bar"
+              role="progressbar"
+              style="width: 0%"
+              aria-valuenow="50"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            ></div>
+          </div>
+          <button
+            type="button"
+            class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-brown rounded-pill"
+            style="width: 2rem; height: 2rem"
+          >
+            1
+          </button>
+          <button
+            type="button"
+            class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-gray2 rounded-pill"
+            style="width: 2rem; height: 2rem"
+          >
+            2
+          </button>
+          <button
+            type="button"
+            class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-gray2 rounded-pill"
+            style="width: 2rem; height: 2rem"
+          >
+            3
+          </button>
+        </div>
+        <div class="pt-1">
+          <div class="position-relative m-4">
+            <div
+              class="position-absolute top-0 start-0 translate-middle"
+              style="width: 4rem; height: 2rem"
+            >
+              確認商品
+            </div>
+            <div
+              class="position-absolute top-0 start-50 translate-middle"
+              style="width: 4rem; height: 2rem"
+            >
+              填寫資料
+            </div>
+            <div
+              class="position-absolute top-0 start-100 translate-middle"
+              style="width: 4rem; height: 2rem"
+            >
+              完成訂單
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <table class="table align-middle border-lightBrown pc mt-6">
           <thead>
             <tr class="text-center">
               <th width="200">商品名稱</th>
@@ -163,7 +240,7 @@
             </tr>
           </tfoot>
         </table>
-        <div class="mobile">
+        <div class="mobile mt-5">
           <div
             class="border-top border-lightBrown p-3 bg-white"
             v-for="cart in carts.carts"
@@ -179,14 +256,16 @@
                 />
               </div>
               <div class="col-8 p-0">
-                  <RouterLink
+                <RouterLink
                   class="text-decoration-none text-black"
                   :to="`/product/${cart.product.id}`"
-                  style="font-size: 14px;"
+                  style="font-size: 14px"
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div class="mt-4 d-flex align-items-center  justify-content-between">
+                <div
+                  class="mt-4 d-flex align-items-center justify-content-between"
+                >
                   <div>${{ $filters.numberToCurrencyNo(cart.total) }}</div>
                   <div class="input-group w-100 ps-3">
                     <button
@@ -258,26 +337,6 @@
                 </a>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <div v-else class="text-center mb-8 ">
-        <div class="d-flex flex-column justify-content-center align-items-center">
-          <img
-            src="../../../public/images/empty-cart.png"
-            class="img-fluid object-fit-cover"
-            alt="emptycartpicture"
-            width="300"
-          />
-          <div class="text-brown fs-5">
-            購物車還沒有商品呦~
-            <br />
-            <RouterLink
-              to="/products"
-              class="btn btn-brown text-decoration-none m-3"
-              onclick="window.scrollTo(0, 0)"
-              >按我去選購</RouterLink
-            >
           </div>
         </div>
       </div>
@@ -380,8 +439,14 @@ export default {
 .btnHover {
   cursor: pointer;
 }
+.rwdStep {
+  width: 50%;
+}
 #addCoupon {
   width: 70%;
+}
+.mobile {
+  display: none;
 }
 @media screen and (max-width: 767px) {
   .pc {
@@ -390,10 +455,9 @@ export default {
   .mobile {
     display: block;
   }
-}
-@media screen and (min-width: 768px) {
-  .mobile {
-    display: none;
+  .rwdStep {
+    width: 100%;
+    font-size: 14px;
   }
 }
 </style>

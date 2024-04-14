@@ -26,6 +26,63 @@
         </ol>
       </nav>
     </div>
+    <div class="container-fluid mt-6 rwdStep">
+      <div class="position-relative m-4">
+        <div class="progress" style="height: 2px">
+          <div
+            class="progress-bar"
+            role="progressbar"
+            style="width: 50%"
+            aria-valuenow="50"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          ></div>
+        </div>
+        <button
+          type="button"
+          class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-brown rounded-pill"
+          style="width: 2rem; height: 2rem"
+        >
+          1
+        </button>
+        <button
+          type="button"
+          class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-brown rounded-pill"
+          style="width: 2rem; height: 2rem"
+        >
+          2
+        </button>
+        <button
+          type="button"
+          class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-gray2 rounded-pill"
+          style="width: 2rem; height: 2rem"
+        >
+          3
+        </button>
+      </div>
+      <div class="pt-1">
+        <div class="position-relative m-4">
+          <div
+            class="position-absolute top-0 start-0 translate-middle"
+            style="width: 4rem; height: 2rem"
+          >
+            確認商品
+          </div>
+          <div
+            class="position-absolute top-0 start-50 translate-middle"
+            style="width: 4rem; height: 2rem"
+          >
+            填寫資料
+          </div>
+          <div
+            class="position-absolute top-0 start-100 translate-middle"
+            style="width: 4rem; height: 2rem"
+          >
+            完成訂單
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container mt-5">
       <div class="row">
         <table
@@ -135,15 +192,15 @@
                 <RouterLink
                   class="text-decoration-none text-black"
                   :to="`/product/${cart.product.id}`"
-                  style="font-size: 14px;"
+                  style="font-size: 14px"
                 >
                   {{ cart.product.title }}</RouterLink
                 >
                 <div class="mt-3 d-flex justify-content-between">
-                  <div>${{ $filters.numberToCurrencyNo(cart.product.price) }}</div>
-                  <div class="pe-4">
-                    x {{ cart.qty }}
+                  <div>
+                    ${{ $filters.numberToCurrencyNo(cart.product.price) }}
                   </div>
+                  <div class="pe-4">x {{ cart.qty }}</div>
                 </div>
               </div>
             </div>
@@ -166,7 +223,7 @@
             <div class="text-black text-end mt-3">
               總計：<span>${{ $filters.numberToCurrencyNo(carts.total) }}</span>
             </div>
-            <div class=" text-end mt-3">
+            <div class="text-end mt-3">
               折扣：<span class="text-brown">
                 ${{
                   $filters.numberToCurrencyNo(
@@ -450,6 +507,12 @@ onMounted(() => {
 </script>
 
 <style>
+.rwdStep {
+  width: 50%;
+}
+.mobile {
+  display: none;
+}
 @media screen and (max-width: 767px) {
   .pc {
     display: none;
@@ -457,10 +520,8 @@ onMounted(() => {
   .mobile {
     display: block;
   }
-}
-@media screen and (min-width: 768px) {
-  .mobile {
-    display: none;
+  .rwdStep {
+    width: 50%;
   }
 }
 </style>
