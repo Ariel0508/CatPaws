@@ -39,15 +39,15 @@
       </nav>
       <div class="container bg-vanilla pt-2 pb-5">
         <div class="row mt-5">
-          <div class="col-md-6 d-flex justify-content-center">
+          <div class="col-md-6 d-flex justify-content-center p-0">
             <ImageComponent
               :imageList="imagesUrl"
               class="mb-8"
             ></ImageComponent>
           </div>
-          <div class="col-md-6 d-flex flex-column justify-content-between">
-              <div class="fs-4 mb-4">{{ product.title }}</div>
-              <div class="mb-4">
+          <div class="col-md-6 d-flex flex-column justify-content-between p-0">
+              <div class="fs-4 mb-4 px-2">{{ product.title }}</div>
+              <div class="mb-4 px-2">
                 <div
                   v-if="product.price === product.origin_price"
                   class="text-gray2 fs-5"
@@ -61,18 +61,18 @@
                   <del class="text-gray2 fs-5"
                     >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
                   >
-                  <div class="text-brown fs-4 ms-3">
+                  <div class="text-brown fs-4">
                     ${{ $filters.numberToCurrencyNo(product.price) }}
                   </div>
                 </div>
             </div>
-            <div class="mb-5">
+            <div class="mb-5 px-2">
               <div class="fs-6 mb-2">商品內容:</div>
               <div style="white-space: pre-wrap">
                 {{ product.content }}
               </div>
             </div>
-            <div class="input-group mb-4 rwdQty">
+            <div class="input-group mb-4  px-2 rwdQty">
               <button
                 type="button"
                 class="btn btn-outline-lightBrown"

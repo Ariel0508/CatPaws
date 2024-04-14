@@ -531,7 +531,8 @@ body {
     display: block;
   }
   .rwdStep {
-    width: 50%;
+    width: 100%;
+    font-size: 14px;
   }
 }
 </style>
