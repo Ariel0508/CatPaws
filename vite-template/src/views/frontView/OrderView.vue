@@ -63,13 +63,13 @@
       <div class="pt-1">
         <div class="position-relative m-4">
           <div
-            class="position-absolute top-0 start-0 translate-middle"
+            class="position-absolute top-0 start-0 translate-middle text-brown"
             style="width: 4rem; height: 2rem"
           >
             確認商品
           </div>
           <div
-            class="position-absolute top-0 start-50 translate-middle"
+            class="position-absolute top-0 start-50 translate-middle text-brown"
             style="width: 4rem; height: 2rem"
           >
             填寫資料
@@ -522,7 +522,6 @@ onMounted(() => {
   }
   .rwdStep {
     width: 100%;
-    font-size: 14px;
   }
 }
 </style>

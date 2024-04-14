@@ -85,7 +85,7 @@
         <div class="pt-1">
           <div class="position-relative m-4">
             <div
-              class="position-absolute top-0 start-0 translate-middle"
+              class="position-absolute top-0 start-0 translate-middle text-brown"
               style="width: 4rem; height: 2rem"
             >
               確認商品
@@ -263,11 +263,12 @@
                 >
                   {{ cart.product.title }}</RouterLink
                 >
-                <div
-                  class="mt-4 d-flex align-items-center justify-content-between"
-                >
-                  <div>${{ $filters.numberToCurrencyNo(cart.total) }}</div>
-                  <div class="input-group w-100 ps-3">
+                <div class="row mt-3 align-items-center">
+                  <div class="col-3">
+                   ${{ $filters.numberToCurrencyNo(cart.total) }}
+                  </div>
+                  <div class="col-9">
+                    <div class="input-group w-100 ps-3">
                     <button
                       v-if="cart.qty > 1"
                       type="button"
@@ -310,6 +311,7 @@
                     >
                       <span style="height: 16px; width: 16px">+</span>
                     </button>
+                  </div>
                   </div>
                 </div>
               </div>
@@ -457,7 +459,6 @@ export default {
   }
   .rwdStep {
     width: 100%;
-    font-size: 14px;
   }
 }
 </style>
