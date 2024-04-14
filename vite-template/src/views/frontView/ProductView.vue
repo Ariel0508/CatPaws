@@ -58,7 +58,7 @@
                   v-else
                   class="d-flex align-items-center justify-content-start"
                 >
-                  <del class="text-gray2 fs-5"
+                  <del class="text-gray2 fs-5 me-2"
                     >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
                   >
                   <div class="text-brown fs-4">
