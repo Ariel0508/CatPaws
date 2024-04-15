@@ -110,7 +110,7 @@
               :key="product.id"
             >
               <div
-                class="card shadow-sm bg-body rounded-lg border-0 position-relative mb-5"
+                class="card shadow-sm bg-body border-0 position-relative mb-5"
                 @click="openModal(product)"
               >
                 <span
@@ -120,11 +120,11 @@
                 >
                 <img
                   :src="product.imageUrl"
-                  class="card-img-top object-fit-cover w-100 rwdImg"
+                  class="img-fluid object-fit-cover w-100 rwdImg"
                   alt="productPicture"
                 />
                 <div class="card-body">
-                  <p class="card-title text-center rwdFont">{{ product.title }}</p>
+                  <p class="card-title text-center rwdFont text-truncate">{{ product.title }}</p>
                   <div
                     v-if="product.price === product.origin_price"
                     class="text-gray2 fs-5 card-title text-center"

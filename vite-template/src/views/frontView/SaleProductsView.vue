@@ -71,7 +71,7 @@
               :key="product.id"
             >
               <div
-                class="card shadow-sm rounded-lg border-0 position-relative mb-5"
+                class="card shadow-sm border-0 position-relative mb-5"
                 @click="openModal(product)"
               >
                 <span
@@ -81,11 +81,11 @@
                 >
                 <img
                   :src="product.imageUrl"
-                  class="card-img-top object-fit-cover w-100 rwdImg"
+                  class="img-fluid object-fit-cover w-100 rwdImg"
                   alt="productPicture"
                 />
                 <div class="card-body">
-                  <p class="card-title text-center rwdFont">
+                  <p class="card-title text-center rwdFont text-truncate">
                     {{ product.title }}
                   </p>
                   <div

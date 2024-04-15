@@ -17,7 +17,7 @@ $spacers: (
   0: 0,
   1: $spacer * .25,
   2: $spacer * .5,
-  3: $spacer,
+  3: $spacer * 1,
   4: $spacer * 1.5,
   5: $spacer * 3,
   6: $spacer * 4,
@@ -27,6 +27,8 @@ $spacers: (
 );
 
 $negative-spacers: if($enable-negative-margins, negativify-map($spacers), null);
+
+$card-border-radius: map-get($spacers, 0);
 
 $breadcrumb-active-color: map-get($theme-colors, 'brown');
 $form-range-track-bg: map-get($theme-colors, 'lightBrown');

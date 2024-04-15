@@ -169,7 +169,7 @@
         </div>
       </div>
       <form @submit.prevent="payOrder">
-        <div class="row px-2 py-5 fs-6">
+        <div class="row py-5 fs-6">
           <div class="mb-5">
             付款狀態
             <span class="text-danger fw-bold" v-if="!order.is_paid"
@@ -227,57 +227,58 @@
         <div class="text-center text-brown m-0 p-0 fs-1">-</div>
       </h3>
       <div id="swiper">
-        <swiper
-          :slidesPerView="1"
-          :spaceBetween="10"
-          :pagination="{
-            clickable: true,
-          }"
-          :breakpoints="{
-            '640': {
-              slidesPerView: 2,
-              spaceBetween: 20,
-            },
-            '1024': {
-              slidesPerView: 4,
-              spaceBetween: 30,
-            },
-          }"
-          :grabCursor="true"
-          :freeMode="true"
-          :modules="modules"
-          class="mySwiper"
-          :mousewheel="true"
-          :keyboard="true"
-        >
-          <swiper-slide v-for="product in products" :key="product.id">
+      <swiper
+        :slidesPerView="1"
+        :spaceBetween="10"
+        :pagination="{
+          clickable: true,
+        }"
+        :breakpoints="{
+          '640': {
+            slidesPerView: 2,
+            spaceBetween: 20,
+          },
+          '1024': {
+            slidesPerView: 4,
+            spaceBetween: 30,
+          },
+        }"
+        :grabCursor="true"
+        :freeMode="true"
+        :modules="modules"
+        class="mySwiper"
+        :mousewheel="true"
+        :keyboard="true"
+      >
+        <swiper-slide v-for="product in products" :key="product.id">
             <div
-              style="height: 450px"
-              class="card shadow-sm rounded-lg border-0 position-relative mb-5"
+              class="card shadow-sm border-0 position-relative mb-5"
               @click="openModal(product)"
             >
               <span
-                class="position-absolute top-0 start-0 fw-bold fs-6 text-white p-2 bg-brown"
+                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown fs-6 fw-bold"
                 v-if="product.price !== product.origin_price"
                 >SALE</span
               >
               <img
                 :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
+                class="img-fluid object-fit-cover w-100"
                 style="height: 300px"
                 alt="productPicture"
               />
-              <div class="card-body">
-                <p class="card-title">{{ product.title }}</p>
+              <div
+                class="card-body d-flex flex-column justify-content-between p-3"
+              >
+                <div class="card-title">{{ product.title }}</div>
                 <div
                   v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 card-title text-center"
+                  class="text-gray2 fs-5 mt-2"
                 >
                   ${{ $filters.numberToCurrencyNo(product.origin_price) }}
                 </div>
                 <div
                   v-else
-                  class="d-flex align-items-center justify-content-center card-title ms-2"
+                  class="d-flex align-items-center justify-content-center ms-2 mt-2"
                 >
                   <del class="text-gray2 fs-5"
                     >${{
@@ -288,24 +289,26 @@
                     ${{ $filters.numberToCurrencyNo(product.price) }}
                   </div>
                 </div>
-                <br />
-                <button
-                  type="button"
-                  class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                  @click.stop="addToCart(product.id, 1)"
-                >
-                  <span
-                    v-if="product.id === status.loadingItem"
-                    class="spinner-border spinner-border-sm"
-                    aria-hidden="true"
-                  ></span
-                  ><i class="bi bi-cart-plus"></i>
-                </button>
+                <div class="mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown m-2 px-5 rounded-pill"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
+                      v-if="product.id === status.loadingItem"
+                      class="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                    加入購物車
+                    <i class="bi bi-cart-plus fs-5"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </swiper-slide>
-        </swiper>
-      </div>
+        </swiper-slide>
+      </swiper>
+    </div>
     </div>
     <ToastMessages />
   </div>

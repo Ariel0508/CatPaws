@@ -19,7 +19,7 @@
         "
       />
     </VueLoading>
-    <div class="row p-0 bg-black mt-6">
+    <div class="row p-0 bg-black mt-5">
       <div class="col-md-5 col-12 p-0">
         <img
           src="../../../public/images/1.png"
@@ -28,7 +28,9 @@
           alt="banner"
         />
       </div>
-      <div class="col-md-7 col-12 text-center p-0 d-flex flex-column align-items-center justify-content-center">
+      <div
+        class="col-md-7 col-12 text-center p-0 d-flex flex-column align-items-center justify-content-center"
+      >
         <div class="m-4">
           <p class="text-light mt-3" style="font-size: 1.5em">
             讓您的貓咪成為時尚界的新寵兒!
@@ -46,29 +48,33 @@
   </div>
 
   <div class="container mt-8">
+    <h3 class="text-center text-brown">
+      新品上市
+      <div class="text-center text-brown m-0 p-0 fs-1">-</div>
+    </h3>
     <swiper
-    :spaceBetween="30"
-    :centeredSlides="true"
-    :autoplay="{
-      delay: 2500,
-      disableOnInteraction: false,
-    }"
-    :pagination="{
-      clickable: true,
-    }"
-    :navigation="true"
-    :modules="modules"
-    class="mySwiper">
+      :spaceBetween="30"
+      :centeredSlides="true"
+      :autoplay="{
+        delay: 2500,
+        disableOnInteraction: false,
+      }"
+      :pagination="{
+        clickable: true,
+      }"
+      :navigation="true"
+      :modules="modules"
+      class="mySwiper"
+    >
       <swiper-slide>
-        <div class="row pc mb-5 ">
+        <div class="row pc mb-5">
           <div
             class="col-md-6 p-0 bg-white d-flex justify-content-start text-start"
             v-if="lastProduct"
             style="width: 550px"
           >
-            <div class="ms-5">
-              <p class="fs-1 mt-8">新品上市</p>
-              <p class="card-title fs-5 mt-6 mb-3">
+            <div class="ms-5 my-6 d-flex flex-column justify-content-between">
+              <p class="card-title fs-5 my-3">
                 {{ lastProduct.title }}
               </p>
               <span class="card-title text-brown fs-5"
@@ -103,9 +109,8 @@
             v-if="secondLastProduct"
             style="width: 550px"
           >
-            <div class="ms-5">
-              <p class="fs-1 mt-8">新品上市</p>
-              <p class="card-title fs-5 mt-6 mb-3">
+            <div class="ms-5 my-6 d-flex flex-column justify-content-between">
+              <p class="card-title fs-5 my-3">
                 {{ secondLastProduct.title }}
               </p>
               <span class="card-title text-brown fs-5"
@@ -136,36 +141,78 @@
         </div>
       </swiper-slide>
     </swiper>
-    <div class="row newProduct mobile">
-      <div class="col-12 position-relative cursor-pointer">
-        <img
-          :src="lastProduct?.imagesUrl[0]"
-          class="img-fluid object-fit-cover w-100"
-          style="height: 500px"
-          alt="picture"
-          @click="openModal(lastProduct)"
-        />
-        <a
-          class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-white fs-4"
+    <div class="mobile">
+      <div id="swiper">
+        <swiper
+          :slidesPerView="1"
+          :spaceBetween="10"
+          :pagination="{
+            clickable: true,
+          }"
+          :autoplay="{
+            delay: 2500,
+            disableOnInteraction: false,
+          }"
+          :breakpoints="{
+            '640': {
+              slidesPerView: 2,
+              spaceBetween: 20,
+            },
+            '1024': {
+              slidesPerView: 4,
+              spaceBetween: 30,
+            },
+          }"
+          :grabCursor="true"
+          :freeMode="true"
+          :modules="modules"
+          class="mySwiper"
+          :mousewheel="true"
+          :keyboard="true"
         >
-          新品上市
-        </a>
-      </div>
-    </div>
-    <div class="row newProduct mobile">
-      <div class="col-12 position-relative cursor-pointer">
-        <img
-          :src="secondLastProduct?.imagesUrl[0]"
-          class="img-fluid object-fit-cover w-100"
-          style="height: 500px"
-          alt="picture"
-          @click="openModal(secondLastProduct)"
-        />
-        <a
-          class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-white fs-4"
-        >
-          新品上市
-        </a>
+          <swiper-slide>
+            <div
+              class="cursor-pointer mb-5"
+              v-if="lastProduct"
+              @click="openModal(lastProduct)"
+            >
+              <img
+                :src="lastProduct?.imagesUrl[0]"
+                class="img-fluid object-fit-cover w-100"
+                style="height: 300px"
+                alt="picture"
+              />
+              <p class="my-3">
+                {{ lastProduct.title }}
+              </p>
+              <span class="text-brown fs-5"
+                >${{ $filters.numberToCurrencyNo(lastProduct.price) }}</span
+              >
+            </div>
+          </swiper-slide>
+          <swiper-slide>
+            <div
+              class="cursor-pointer mb-5"
+              v-if="secondLastProduct"
+              @click="openModal(secondLastProduct)"
+            >
+              <img
+                :src="secondLastProduct?.imagesUrl[0]"
+                class="img-fluid object-fit-cover w-100"
+                style="height: 300px"
+                alt="picture"
+              />
+              <p class="my-3">
+                {{ secondLastProduct.title }}
+              </p>
+              <span class="text-brown fs-5"
+                >${{
+                  $filters.numberToCurrencyNo(secondLastProduct.price)
+                }}</span
+              >
+            </div>
+          </swiper-slide>
+        </swiper>
       </div>
     </div>
   </div>
@@ -264,60 +311,56 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div>
-            <div
-              class="card shadow-sm rounded-lg border-0 position-relative mb-5"
-              @click="openModal(product)"
+          <div
+            class="card shadow-sm border-0 position-relative mb-5"
+            @click="openModal(product)"
+          >
+            <span
+              class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown fs-6 fw-bold"
+              v-if="product.price !== product.origin_price"
+              >SALE</span
             >
-              <span
-                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown fs-6 fw-bold"
-                v-if="product.price !== product.origin_price"
-                >SALE</span
-              >
-              <img
-                :src="product.imageUrl"
-                class="card-img-top object-fit-cover w-100"
-                style="height: 300px"
-                alt="productPicture"
-              />
+            <img
+              :src="product.imageUrl"
+              class="img-fluid object-fit-cover w-100"
+              style="height: 300px"
+              alt="productPicture"
+            />
+            <div
+              class="card-body d-flex flex-column justify-content-between p-3"
+            >
+              <div class="card-title">{{ product.title }}</div>
               <div
-                class="card-body d-flex flex-column justify-content-between p-3"
+                v-if="product.price === product.origin_price"
+                class="text-gray2 fs-5 mt-2"
               >
-                <div class="card-title">{{ product.title }}</div>
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5 mt-2"
+                ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+              </div>
+              <div
+                v-else
+                class="d-flex align-items-center justify-content-center ms-2 mt-2"
+              >
+                <del class="text-gray2 fs-5"
+                  >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
                 >
-                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                <div class="text-brown fs-5 ms-3">
+                  ${{ $filters.numberToCurrencyNo(product.price) }}
                 </div>
-                <div
-                  v-else
-                  class="d-flex align-items-center justify-content-center ms-2 mt-2"
+              </div>
+              <div class="mt-2">
+                <button
+                  type="button"
+                  class="btn btn-outline-brown m-2 px-5 rounded-pill"
+                  @click.stop="addToCart(product.id, 1)"
                 >
-                  <del class="text-gray2 fs-5"
-                    >${{
-                      $filters.numberToCurrencyNo(product.origin_price)
-                    }}</del
-                  >
-                  <div class="text-brown fs-5 ms-3">
-                    ${{ $filters.numberToCurrencyNo(product.price) }}
-                  </div>
-                </div>
-                <div class="mt-2">
-                  <button
-                    type="button"
-                    class="btn btn-outline-brown m-2 px-5 rounded-pill"
-                    @click.stop="addToCart(product.id, 1)"
-                  >
-                    <span
-                      v-if="product.id === status.loadingItem"
-                      class="spinner-border spinner-border-sm"
-                      aria-hidden="true"
-                    ></span>
-                    加入購物車
-                    <i class="bi bi-cart-plus fs-5"></i>
-                  </button>
-                </div>
+                  <span
+                    v-if="product.id === status.loadingItem"
+                    class="spinner-border spinner-border-sm"
+                    aria-hidden="true"
+                  ></span>
+                  加入購物車
+                  <i class="bi bi-cart-plus fs-5"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -344,7 +387,13 @@ import 'swiper/css/pagination'
 
 import 'swiper/css/navigation'
 
-import { Navigation, Pagination, Autoplay, Mousewheel, Keyboard } from 'swiper/modules'
+import {
+  Navigation,
+  Pagination,
+  Autoplay,
+  Mousewheel,
+  Keyboard
+} from 'swiper/modules'
 
 export default {
   setup () {
@@ -539,23 +588,20 @@ body {
   opacity: 1;
   transition: ease-in-out 0.3s;
 }
+.mobile {
+  display: none;
+}
 @media screen and (max-width: 767px) {
+  .mySwiper {
+    width: 100%;
+  }
+}
+@media screen and (max-width: 1280px) {
   .pc {
     display: none;
   }
   .mobile {
     display: block;
-  }
-  .newProduct {
-    margin-top: 80px;
-  }
-  .mySwiper {
-    width: 100%;
-  }
-}
-@media screen and (min-width: 768px) {
-  .mobile {
-    display: none;
   }
 }
 </style>

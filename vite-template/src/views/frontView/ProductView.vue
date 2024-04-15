@@ -46,25 +46,25 @@
             ></ImageComponent>
           </div>
           <div class="col-md-6 d-flex flex-column justify-content-between p-0">
-              <div class="fs-4 mb-4 px-2">{{ product.title }}</div>
-              <div class="mb-4 px-2">
-                <div
-                  v-if="product.price === product.origin_price"
-                  class="text-gray2 fs-5"
+            <div class="fs-4 mb-4 px-2">{{ product.title }}</div>
+            <div class="mb-4 px-2">
+              <div
+                v-if="product.price === product.origin_price"
+                class="text-gray2 fs-5"
+              >
+                ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+              </div>
+              <div
+                v-else
+                class="d-flex align-items-center justify-content-start"
+              >
+                <del class="text-gray2 fs-5 me-2"
+                  >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
                 >
-                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                <div class="text-brown fs-4">
+                  ${{ $filters.numberToCurrencyNo(product.price) }}
                 </div>
-                <div
-                  v-else
-                  class="d-flex align-items-center justify-content-start"
-                >
-                  <del class="text-gray2 fs-5 me-2"
-                    >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
-                  >
-                  <div class="text-brown fs-4">
-                    ${{ $filters.numberToCurrencyNo(product.price) }}
-                  </div>
-                </div>
+              </div>
             </div>
             <div class="mb-5 px-2">
               <div class="fs-6 mb-2">商品內容:</div>
@@ -72,12 +72,12 @@
                 {{ product.content }}
               </div>
             </div>
-            <div class="input-group mb-4  px-2 rwdQty">
+            <div class="input-group mb-4 px-2 rwdQty">
               <button
                 type="button"
-                class="btn btn-outline-lightBrown"
-                :disabled="qty === 1"
-                @click="qty--"
+                class="btn btn-brown"
+                @click="qty > 1 ? qty-- : null"
+                :disabled="qty <= 1"
               >
                 -
               </button>
@@ -92,8 +92,9 @@
               />
               <button
                 type="button"
-                class="btn btn-outline-lightBrown"
-                @click="qty++"
+                class="btn btn-brown"
+                @click="qty < 20 ? qty++ : null"
+                :disabled="qty >= 20"
               >
                 +
               </button>
@@ -165,8 +166,7 @@
     <h3 class="text-center text-brown">
       猜你喜歡
       <div class="text-center text-brown m-0 p-0 fs-1">-</div>
-    </h3>
-    <div id="swiper">
+    </h3><div id="swiper">
       <swiper
         :slidesPerView="1"
         :spaceBetween="10"
@@ -191,57 +191,61 @@
         :keyboard="true"
       >
         <swiper-slide v-for="product in products" :key="product.id">
-          <div
-            style="height: 450px"
-            class="card shadow-sm rounded-lg border-0 position-relative mb-5"
-            @click="openModal(product)"
-          >
-            <span
-              class="position-absolute top-0 start-0 fw-bold text-white p-2 fs-6 bg-brown"
-              v-if="product.price !== product.origin_price"
-              >SALE</span
+            <div
+              class="card shadow-sm border-0 position-relative mb-5"
+              @click="openModal(product)"
             >
-            <img
-              :src="product.imageUrl"
-              class="card-img-top object-fit-cover w-100"
-              style="height: 300px"
-              alt="productPicture"
-            />
-            <div class="card-body">
-              <p class="card-title">{{ product.title }}</p>
-              <div
-                v-if="product.price === product.origin_price"
-                class="text-gray2 fs-5 card-title text-center"
+              <span
+                class="position-absolute top-0 start-0 fw-bold text-white p-2 bg-brown fs-6 fw-bold"
+                v-if="product.price !== product.origin_price"
+                >SALE</span
               >
-                ${{ $filters.numberToCurrencyNo(product.origin_price) }}
-              </div>
+              <img
+                :src="product.imageUrl"
+                class="img-fluid object-fit-cover w-100"
+                style="height: 300px"
+                alt="productPicture"
+              />
               <div
-                v-else
-                class="d-flex justify-content-center align-items-center card-title ms-2"
+                class="card-body d-flex flex-column justify-content-between p-3"
               >
-                <del class="text-gray2 fs-5"
-                  >${{ $filters.numberToCurrencyNo(product.origin_price) }}</del
+                <div class="card-title">{{ product.title }}</div>
+                <div
+                  v-if="product.price === product.origin_price"
+                  class="text-gray2 fs-5 mt-2"
                 >
-                <div class="text-brown fs-5 ms-3">
-                  ${{ $filters.numberToCurrencyNo(product.price) }}
+                  ${{ $filters.numberToCurrencyNo(product.origin_price) }}
+                </div>
+                <div
+                  v-else
+                  class="d-flex align-items-center justify-content-center ms-2 mt-2"
+                >
+                  <del class="text-gray2 fs-5"
+                    >${{
+                      $filters.numberToCurrencyNo(product.origin_price)
+                    }}</del
+                  >
+                  <div class="text-brown fs-5 ms-3">
+                    ${{ $filters.numberToCurrencyNo(product.price) }}
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <button
+                    type="button"
+                    class="btn btn-outline-brown m-2 px-5 rounded-pill"
+                    @click.stop="addToCart(product.id, 1)"
+                  >
+                    <span
+                      v-if="product.id === status.loadingItem"
+                      class="spinner-border spinner-border-sm"
+                      aria-hidden="true"
+                    ></span>
+                    加入購物車
+                    <i class="bi bi-cart-plus fs-5"></i>
+                  </button>
                 </div>
               </div>
-              <br />
-              <button
-                type="button"
-                class="btn btn-outline-brown border-0 fs-5 m-2 position-absolute bottom-0 end-0"
-                @click.stop="addToCart(product.id, 1)"
-              >
-                <span
-                  v-if="product.id === status.loadingItem"
-                  class="spinner-border spinner-border-sm"
-                  aria-hidden="true"
-                >
-                </span>
-                <i class="bi bi-cart-plus"></i>
-              </button>
             </div>
-          </div>
         </swiper-slide>
       </swiper>
     </div>

@@ -123,8 +123,8 @@
           <tfoot>
             <tr class="border-white">
               <td colspan="2" class="pt-4">
-                <div class="d-flex align-items-center justify-content-end">
-                  <i class="bi bi-ticket-perforated fs-2 text-brown pe-3"></i>
+                <div class="d-flex align-items-center justify-content-center">
+                  <i class="bi bi-ticket-perforated fs-2 text-brown px-3"></i>
                   <select
                     name="addCoupon"
                     id="addCoupon"
